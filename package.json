@@ -1,11 +1,11 @@
 {
-  "name": "v2",
-  "description": "Personal Website V2",
+  "name": "portfolio",
+  "description": "Personal Portfolio Website",
   "version": "1.0.0",
-  "author": "Chandrika Deb <chandrikadeb7@gmail.com>",
+  "author": "Sumit Bhardwaj <bhardwajsvmit@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chandrikadeb7/chandrikadeb7.github.io"
+    "url": "https://github.com/bhardwajsvmit/bhardwajsvmit.github.io"
   },
   "keywords": [
     "gatsby"
