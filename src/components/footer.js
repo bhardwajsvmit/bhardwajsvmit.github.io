@@ -110,7 +110,7 @@ const Footer = () => {
             Revised by Sumit Bhardwaj
           </div>
 
-          {githubInfo.stars && githubInfo.forks && (
+          {/* {githubInfo.stars && githubInfo.forks && (
             <StyledGitHubInfo>
               <span>
                 <FormattedIcon name="Star" />
@@ -121,7 +121,7 @@ const Footer = () => {
                 <span>{githubInfo.forks.toLocaleString()}</span>
               </span>
             </StyledGitHubInfo>
-          )}
+          )} */}
         </StyledGitHubLink>
       </StyledMetadata>
     </StyledContainer>

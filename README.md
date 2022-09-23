@@ -12,9 +12,6 @@
   <img alt="Demo" src="https://github.com/bhardwajsvmit/bhardwajsvmit.github.io/blob/main/src/images/demo.png" />
 </div>
 
-### TL;DR
-
-Yes, you can fork this repo. Please give proper credit by linking back to [brittanychiang.com](https://brittanychiang.com). Thanks!
 
 ## 🛠 Installation & Set Up
 
