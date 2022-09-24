@@ -2,7 +2,7 @@
 date: '2021-02-21'
 title: 'Software Development Engineer'
 company: 'myclassroom'
-range: 'Feburary 2020 - Present'
+range: 'Feburary 2021 - Present'
 url: 'https://myclassroom.digital/'
 ---
 
