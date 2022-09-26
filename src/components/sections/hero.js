@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { email } from '@config';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { theme, mixins, media, Section } from '@styles';
 const { colors, fontSizes, fonts, navDelay, loaderDelay } = theme;
+
+
 
 const StyledContainer = styled(Section)`
   ${mixins.flexCenter};
@@ -25,8 +27,49 @@ const StyledOverline = styled.h1`
   ${media.desktop`font-size: ${fontSizes.sm};`};
   ${media.tablet`font-size: ${fontSizes.smish};`};
 `;
+
+const pulsate = keyframes`
+ 0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    /* Larger blur radius */
+    text-shadow:
+      0 0 7px #fff,
+      0 0 10px #0fa,
+      0 0 21px #0fa,
+      0 0 42px #0fa,
+      0 0 82px #0fa;
+  }
+  20%, 24%, 55%  {
+    /* Smaller blur radius */
+    text-shadow:
+      0 0 2px #fff,
+      0 0 4px #0fa,
+      0 0 6px #0fa;
+      /* 0 0 10px #0fa,
+      0 0 17px #0fa; */
+      /* 0 0 45px #0fa,
+      0 0 55px #0fa,
+      0 0 70px #0fa,
+      0 0 80px #0fa; */
+  }
+`
+
 const StyledTitle = styled.h2`
+
+color : white;
+/* text-shadow:
+      0 0 7px #fff,
+      0 0 10px #0fa,
+      0 0 21px #0fa,
+      0 0 42px #0fa,
+      0 0 82px #0fa; */
+      /* 0 0 92px #0fa,
+      0 0 102px #0fa,
+      0 0 151px #0fa; */
+
+  animation: ${pulsate} 2s infinite alternate;   
+
   font-size: 80px;
+  /* font-weight: 600; */
   line-height: 1.1;
   margin: 0;
   ${media.desktop`font-size: 70px;`};
