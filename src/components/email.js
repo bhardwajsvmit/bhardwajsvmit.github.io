@@ -19,8 +19,8 @@ const StyledLinkWrapper = styled.div`
     margin: 0 auto;
     background-color: ${colors.lightSlate};
   }
-`;
-const StyledEmailLink = styled.a`
+
+a{
   font-family: ${fonts.SFMono};
   font-size: ${fontSizes.s};
   letter-spacing: 0.1em;
@@ -32,12 +32,13 @@ const StyledEmailLink = styled.a`
   &:focus {
     transform: translateY(-3px);
   }
-`;
+};
+`
 
 const Email = ({ isHome }) => (
   <Side isHome={isHome} orientation="right">
     <StyledLinkWrapper>
-      <StyledEmailLink href={`mailto:${email}`}>{email}</StyledEmailLink>
+      <a href={`mailto:${email}`}>{email}</a>
     </StyledLinkWrapper>
   </Side>
 );
