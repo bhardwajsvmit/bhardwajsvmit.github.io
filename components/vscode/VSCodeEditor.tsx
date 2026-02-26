@@ -29,7 +29,7 @@ export function VSCodeEditor({
   setDraggedTab,
   handleContentChange,
 }: VSCodeEditorProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null) as React.RefObject<HTMLTextAreaElement>;
 
   const files = {
     "README.md": { language: "Markdown", icon: "md", folder: null },
