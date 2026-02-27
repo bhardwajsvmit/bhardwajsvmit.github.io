@@ -4,8 +4,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: "/YOUR_REPO_NAME",
-  assetPrefix: "/YOUR_REPO_NAME/",
+  basePath: "/sumit-portfolio",
+  assetPrefix: "/sumit-portfolio/",
 };
 
 module.exports = nextConfig;
