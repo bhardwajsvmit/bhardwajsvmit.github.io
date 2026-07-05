@@ -47,9 +47,9 @@ const StyledContent = styled.div`
   min-height: 100vh;
 `;
 
-const Layout = ({ children, location }) => {
+const Layout = ({ children, location, bare }) => {
   const isHome = location.pathname === '/';
-  const [isLoading, setIsLoading] = useState(isHome);
+  const [isLoading, setIsLoading] = useState(isHome && !bare);
 
   useEffect(() => {
     if (isLoading) {
@@ -88,7 +88,9 @@ const Layout = ({ children, location }) => {
 
           <SkipToContent href="#content">Skip to Content</SkipToContent>
 
-          {isLoading && isHome ? (
+          {bare ? (
+            <div id="content">{children}</div>
+          ) : isLoading && isHome ? (
             <Loader finishLoading={() => setIsLoading(false)} />
           ) : (
             <StyledContent>
@@ -111,6 +113,7 @@ const Layout = ({ children, location }) => {
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
   location: PropTypes.object.isRequired,
+  bare: PropTypes.bool,
 };
 
 export default Layout;

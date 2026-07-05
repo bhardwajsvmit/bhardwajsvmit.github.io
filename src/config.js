@@ -1,16 +1,18 @@
 module.exports = {
-  siteTitle: 'Sumit Bhardwaj | Software Development Engineer',
+  siteTitle: 'Sumit Bhardwaj | Senior Frontend Engineer',
   siteDescription:
-    'Sumit Bhardwaj is a Software Development Engineer at myclassroom, who loves learning new things and helping tech beginners.',
+    'Sumit Bhardwaj is a Senior Frontend Engineer who takes products from 0→1 and scales them to millions of users — performance, SSR/SEO, design systems, and security.',
   siteKeywords:
-    'Sumit Bhardwaj, Sumit, Bhardwaj, bhardwajsvmit, software developer, software development engineer, software engineer, web developer, react developer, react native developer, delhi',
+    'Sumit Bhardwaj, Sumit, Bhardwaj, bhardwajsvmit, senior frontend engineer, software engineer, react developer, next.js developer, react native developer, new delhi',
   siteUrl: 'https://bhardwajsvmit.github.io/',
   siteLanguage: 'en_US',
   googleAnalyticsID: 'UA-45666519-2',
   googleVerification: 'DCl7VAf9tcz6eD9gb67NfkNnJ1PKRNcg8qQiwpbx9Lk',
   name: 'Sumit Bhardwaj',
-  location: 'Delhi, India',
+  location: 'New Delhi, IN',
   email: 'bhardwajsvmit@gmail.com',
+  phone: '+919654901601',
+  phoneDisplay: '+91 96549 01601',
   github: 'https://github.com/bhardwajsvmit',
   twitterHandle: '@sumitbhardwaj_',
   socialMedia: [
@@ -38,20 +40,20 @@ module.exports = {
 
   navLinks: [
     {
-      name: 'About',
-      url: '/#about',
+      name: 'Work',
+      url: '/#work',
+    },
+    {
+      name: 'Impact',
+      url: '/#impact',
     },
     {
       name: 'Experience',
-      url: '/#jobs',
+      url: '/#timeline',
     },
     {
-      name: 'Projects',
-      url: '/#projects',
-    },
-    {
-      name: 'Contact',
-      url: '/#contact',
+      name: 'About',
+      url: '/#about',
     },
   ],
 
@@ -62,6 +64,13 @@ module.exports = {
     navy: '#0a192f',
     darkNavy: '#020c1b',
   },
+
+  stats: [
+    { value: 2, suffix: 'M', label: 'Weekly active users\nscaled from 300K' },
+    { value: 98, prefix: '~', suffix: '%', label: 'Drop-off cut\nat game launch' },
+    { value: 200, prefix: '$', suffix: 'K', label: 'Hackathon 1st prize\nglobal · UI/UX' },
+    { value: 6, label: 'Engineers led\nacross 4 teams' },
+  ],
 
   srConfig: (delay = 200) => ({
     origin: 'bottom',

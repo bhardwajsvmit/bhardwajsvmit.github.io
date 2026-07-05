@@ -1,140 +1,115 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Img from 'gatsby-image';
 import sr from '@utils/sr';
-import { srConfig, github } from '@config';
+import { srConfig } from '@config';
 import styled from 'styled-components';
-import { theme, mixins, media, Section, Heading } from '@styles';
-const { colors, fontSizes, fonts } = theme;
+import { media } from '@styles';
 
-const StyledContainer = styled(Section)`
-  position: relative;
+const INK = '#111110';
+const CREAM = '#ECE7DA';
+const ACCENT = '#FF4D23';
+
+const StyledSection = styled.section`
+  background: ${CREAM};
+  padding: 96px 34px;
 `;
-const StyledFlexContainer = styled.div`
-  ${mixins.flexBetween};
-  align-items: flex-start;
-  ${media.tablet`display: block;`};
-`;
-const StyledContent = styled.div`
-  width: 60%;
-  max-width: 480px;
-  ${media.tablet`width: 100%;`};
-  a {
-    ${mixins.inlineLink};
-  }
-`;
-const SkillsContainer = styled.ul`
+const StyledInner = styled.div`
+  max-width: 1500px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(2, minmax(140px, 200px));
-  overflow: hidden;
-  padding: 0;
-  margin: 20px 0 0 0;
-  list-style: none;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 60px;
+  align-items: start;
+  ${media.tablet`grid-template-columns: 1fr;`};
 `;
-const Skill = styled.li`
-  position: relative;
-  margin-bottom: 10px;
-  padding-left: 20px;
-  font-family: ${fonts.SFMono};
-  font-size: ${fontSizes.smish};
-  color: ${colors.green};
-  &:before {
-    content: '▹';
-    position: absolute;
-    left: 0;
-    color: ${colors.green};
-    font-size: ${fontSizes.sm};
-    line-height: 12px;
-  }
+const StyledEyebrow = styled.div`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: ${ACCENT};
+  margin-bottom: 14px;
 `;
-const StyledPic = styled.div`
-  position: relative;
-  width: 40%;
-  max-width: 300px;
-  margin-left: 60px;
-  ${media.tablet`margin: 60px auto 0;`};
-  ${media.phablet`width: 70%;`};
-  a {
-    &:focus {
-      outline: 0;
-    }
+const StyledTitle = styled.h2`
+  margin: 0;
+  color: ${INK};
+  font-weight: 800;
+  font-size: clamp(30px, 4vw, 58px);
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+  mark {
+    background: none;
+    color: ${ACCENT};
   }
 `;
-const StyledAvatar = styled(Img)`
-  position: relative;
-  mix-blend-mode: multiply;
-  filter: grayscale(100%) contrast(1);
-  border-radius: ${theme.borderRadius};
-  transition: ${theme.transition};
+const StyledBody = styled.div`
+  p {
+    margin: 26px 0 0;
+    max-width: 600px;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #1c1b18;
+  }
 `;
-const StyledAvatarLink = styled.a`
-  ${mixins.boxShadow};
-  width: 100%;
-  position: relative;
-  border-radius: ${theme.borderRadius};
-  background-color: ${colors.lightestSlate};
-  margin-left: -20px;
-  &:hover,
-  &:focus {
-    background: transparent;
-    &:after {
-      top: 15px;
-      left: 15px;
-    }
-    ${StyledAvatar} {
-      filter: none;
-      mix-blend-mode: normal;
-    }
+const StyledSkills = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 2px solid ${INK};
+`;
+const StyledSkillGroup = styled.div`
+  padding: 20px 22px;
+  border-bottom: 2px solid ${INK};
+  transition: background 0.24s ease, color 0.24s ease;
+  &:last-of-type {
+    border-bottom: none;
   }
-  &:before,
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: ${theme.borderRadius};
-    transition: ${theme.transition};
+  &:hover {
+    background: ${INK};
+    color: ${CREAM};
   }
-  &:before {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: ${colors.navy};
-    mix-blend-mode: screen;
-  }
-  &:after {
-    border: 2px solid ${colors.green};
-    top: 10px;
-    left: 10px;
-    z-index: -1;
-  }
+`;
+const StyledSkillLabel = styled.div`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: ${ACCENT};
+`;
+const StyledSkillItems = styled.div`
+  margin-top: 8px;
+  font-weight: 600;
+  font-size: 15px;
 `;
 
 const About = ({ data }) => {
   const { frontmatter, html } = data[0].node;
-  const { title, skills, avatar } = frontmatter;
+  const { skillGroups } = frontmatter;
   const revealContainer = useRef(null);
+
   useEffect(() => sr.reveal(revealContainer.current, srConfig()), []);
 
   return (
-    <StyledContainer id="about" ref={revealContainer}>
-      <Heading>{title}</Heading>
-      <StyledFlexContainer>
-        <StyledContent>
-          <div dangerouslySetInnerHTML={{ __html: html }} />
-          <SkillsContainer>
-            {skills && skills.map((skill, i) => <Skill key={i}>{skill}</Skill>)}
-          </SkillsContainer>
-        </StyledContent>
-        <StyledPic>
-          <StyledAvatarLink href={github}>
-            <StyledAvatar fluid={avatar.childImageSharp.fluid} alt="Avatar" />
-          </StyledAvatarLink>
-        </StyledPic>
-      </StyledFlexContainer>
-    </StyledContainer>
+    <StyledSection id="about" ref={revealContainer}>
+      <StyledInner>
+        <div>
+          <StyledEyebrow>[ 04 ] About</StyledEyebrow>
+          <StyledTitle>
+            Solo architect <mark>&amp;</mark> team lead.
+          </StyledTitle>
+          <StyledBody dangerouslySetInnerHTML={{ __html: html }} />
+        </div>
+        <StyledSkills>
+          {skillGroups &&
+            skillGroups.map((group, i) => (
+              <StyledSkillGroup key={i} className="skill">
+                <StyledSkillLabel>{group.label}</StyledSkillLabel>
+                <StyledSkillItems>{group.items.join(' · ')}</StyledSkillItems>
+              </StyledSkillGroup>
+            ))}
+        </StyledSkills>
+      </StyledInner>
+    </StyledSection>
   );
 };
 

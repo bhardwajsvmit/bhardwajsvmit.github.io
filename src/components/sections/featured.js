@@ -1,287 +1,165 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Img from 'gatsby-image';
 import sr from '@utils/sr';
 import { srConfig } from '@config';
-import { FormattedIcon } from '@components/icons';
 import styled from 'styled-components';
-import { theme, mixins, media, Section, Heading } from '@styles';
-const { colors, fontSizes, fonts } = theme;
 
-const StyledContainer = styled(Section)`
-  ${mixins.flexCenter};
-  flex-direction: column;
-  align-items: flex-start;
+const INK = '#111110';
+const CREAM = '#ECE7DA';
+const ACCENT = '#FF4D23';
+
+const StyledSection = styled.section`
+  background: ${CREAM};
+  padding: 96px 34px;
+`;
+const StyledInner = styled.div`
+  max-width: 1500px;
+  margin: 0 auto;
+`;
+const StyledEyebrow = styled.div`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: ${ACCENT};
+  margin-bottom: 14px;
+`;
+const StyledTitle = styled.h2`
+  margin: 0 0 50px;
+  color: ${INK};
+  font-weight: 800;
+  font-size: clamp(34px, 5vw, 72px);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+`;
+const StyledList = styled.div`
+  border-top: 2px solid ${INK};
+`;
+const StyledWorkTitle = styled.h3`
+  margin: 0;
+  color: inherit;
+  font-weight: 800;
+  font-size: clamp(30px, 4.2vw, 60px);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  transition: transform 0.34s cubic-bezier(0.2, 0.7, 0.2, 1);
+`;
+const StyledArrow = styled.div`
+  font-size: 26px;
+  margin-top: 8px;
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.4, 1), color 0.3s ease;
+`;
+const StyledRow = styled.article`
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 30px;
+  align-items: start;
+  padding: 36px 8px;
+  border-bottom: 2px solid ${INK};
+  cursor: pointer;
+  transition: background 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+    padding 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  &:hover {
+    background: ${INK};
+    color: ${CREAM};
+    padding-left: 24px;
+    padding-right: 24px;
+    ${StyledWorkTitle} {
+      transform: translateX(12px);
+    }
+    ${StyledArrow} {
+      transform: translate(7px, -7px);
+      color: ${ACCENT};
+    }
+  }
+`;
+const StyledIndex = styled.div`
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 15px;
+  color: ${ACCENT};
 `;
 const StyledContent = styled.div`
-  position: relative;
-  grid-column: 1 / 7;
-  grid-row: 1 / -1;
-  ${media.thone`
-    grid-column: 1 / -1;
-    padding: 40px 40px 30px;
-    z-index: 5;
-  `};
-  ${media.phablet`padding: 30px 25px 20px;`};
+  min-width: 0;
 `;
-const StyledLabel = styled.h4`
-  font-size: ${fontSizes.smish};
-  font-weight: normal;
-  color: ${colors.green};
-  font-family: ${fonts.SFMono};
-  margin-top: 10px;
-  padding-top: 0;
+const StyledDescription = styled.p`
+  margin: 14px 0 0;
+  max-width: 680px;
+  font-size: 15.5px;
+  font-weight: 500;
+  line-height: 1.6;
 `;
-const StyledProjectName = styled.h5`
-  font-size: 28px;
-  margin: 0 0 20px;
-  color: ${colors.lightestSlate};
-  ${media.tablet`font-size: 24px;`};
-  ${media.thone`color: ${colors.white};`};
-  a {
-    ${media.tablet`display: block;`};
-  }
-`;
-const StyledDescription = styled.div`
-  ${mixins.boxShadow};
-  position: relative;
-  z-index: 2;
-  padding: 25px;
-  background-color: ${colors.lightNavy};
-  color: ${colors.lightSlate};
-  font-size: ${fontSizes.lg};
-  border-radius: ${theme.borderRadius};
-  ${media.thone`
-    background-color: transparent;
-    padding: 20px 0;
-    box-shadow: none;
-    &:hover {
-      box-shadow: none;
-    }
-  `};
-  p {
-    margin: 0;
-  }
-  a {
-    ${mixins.inlineLink};
-  }
-`;
-const StyledTechList = styled.ul`
-  position: relative;
-  z-index: 2;
+const StyledTags = styled.div`
+  margin-top: 18px;
   display: flex;
   flex-wrap: wrap;
-  padding: 0;
-  margin: 25px 0 10px;
-  list-style: none;
-
-  li {
-    font-family: ${fonts.SFMono};
-    font-size: ${fontSizes.smish};
-    color: ${colors.green};
-    margin-right: ${theme.margin};
-    margin-bottom: 7px;
-    white-space: nowrap;
-    &:last-of-type {
-      margin-right: 0;
-    }
-    ${media.thone`
-      color: ${colors.green};
-      margin-right: 10px;
-    `};
-  }
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 `;
-const StyledLinkWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin-top: 10px;
-  margin-left: -10px;
-  color: ${colors.lightestSlate};
-  a {
-    padding: 10px;
-    svg {
-      width: 22px;
-      height: 22px;
-    }
-  }
+const StyledTag = styled.span`
+  border: 1.5px solid currentColor;
+  padding: 5px 11px;
+  border-radius: 100px;
 `;
-const StyledFeaturedImg = styled(Img)`
-  width: 100%;
-  max-width: 100%;
-  vertical-align: middle;
-  border-radius: ${theme.borderRadius};
-  position: relative;
-  mix-blend-mode: multiply;
-  filter: grayscale(100%) contrast(1) brightness(90%);
-  ${media.tablet`
-    object-fit: cover;
-    width: auto;
-    height: 100%;
-    filter: grayscale(100%) contrast(1) brightness(80%);
-  `};
-`;
-const StyledImgContainer = styled.a`
-  ${mixins.boxShadow};
-  grid-column: 6 / -1;
-  grid-row: 1 / -1;
-  position: relative;
-  z-index: 1;
-  background-color: ${colors.green};
-  border-radius: ${theme.radius + 1}px;
-  transition: ${theme.transition};
-  ${media.tablet`height: 100%;`};
-  ${media.thone`
-    grid-column: 1 / -1;
-    opacity: 0.25;
-  `};
-  &:hover,
-  &:focus {
-    background: transparent;
-    &:before,
-    ${StyledFeaturedImg} {
-      background: transparent;
-      filter: none;
-    }
-  }
-  &:before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 3;
-    transition: ${theme.transition};
-    background-color: ${colors.navy};
-    mix-blend-mode: screen;
-  }
-`;
-const StyledProject = styled.div`
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(12, 1fr);
-  align-items: center;
-  margin-bottom: 100px;
-  ${media.thone`
-    margin-bottom: 70px;
-  `};
-  &:last-of-type {
-    margin-bottom: 0;
-  }
-  &:nth-of-type(odd) {
-    ${StyledContent} {
-      grid-column: 7 / -1;
-      text-align: right;
-      ${media.thone`
-        grid-column: 1 / -1;
-        padding: 40px 40px 30px;
-      `};
-      ${media.phablet`padding: 30px 25px 20px;`};
-    }
-    ${StyledTechList} {
-      justify-content: flex-end;
-      li {
-        margin-left: ${theme.margin};
-        margin-right: 0;
-      }
-    }
-    ${StyledLinkWrapper} {
-      justify-content: flex-end;
-      margin-left: 0;
-      margin-right: -10px;
-    }
-    ${StyledImgContainer} {
-      grid-column: 1 / 8;
-      ${media.tablet`height: 100%;`};
-      ${media.thone`
-        grid-column: 1 / -1;
-        opacity: 0.25;
-      `};
-    }
-  }
+const StyledYear = styled.div`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  text-align: right;
+  white-space: nowrap;
 `;
 
 const Featured = ({ data }) => {
-  const featuredProjects = data.filter(({ node }) => node);
-
   const revealTitle = useRef(null);
-  const revealProjects = useRef([]);
+  const revealRows = useRef([]);
+  revealRows.current = [];
+  const addReveal = el => el && revealRows.current.push(el);
+
   useEffect(() => {
     sr.reveal(revealTitle.current, srConfig());
-    revealProjects.current.forEach((ref, i) => sr.reveal(ref, srConfig(i * 100)));
+    revealRows.current.forEach((el, i) => sr.reveal(el, srConfig(i * 80)));
   }, []);
 
+  const items = data.filter(({ node }) => node);
+
   return (
-    <StyledContainer id="projects">
-      <Heading ref={revealTitle}>Some Things I&apos;ve Built</Heading>
-
-      <div>
-        {featuredProjects &&
-          featuredProjects.map(({ node }, i) => {
+    <StyledSection id="work">
+      <StyledInner>
+        <StyledEyebrow>[ 02 ] Selected work</StyledEyebrow>
+        <StyledTitle ref={revealTitle}>Things I&rsquo;ve built &amp; owned.</StyledTitle>
+        <StyledList>
+          {items.map(({ node }, i) => {
             const { frontmatter, html } = node;
-            const { external, title, tech, github, cover } = frontmatter;
-
+            const { title, year, tech } = frontmatter;
             return (
-              <StyledProject key={i} ref={el => (revealProjects.current[i] = el)}>
+              <StyledRow key={i} ref={addReveal} data-work>
+                <StyledIndex>{String(i + 1).padStart(2, '0')}</StyledIndex>
                 <StyledContent>
-                  <StyledLabel>Featured Project</StyledLabel>
-                  <StyledProjectName>
-                    {external ? (
-                      <a
-                        href={external}
-                        target="_blank"
-                        rel="nofollow noopener noreferrer"
-                        aria-label="External Link">
-                        {title}
-                      </a>
-                    ) : (
-                      title
-                    )}
-                  </StyledProjectName>
+                  <StyledWorkTitle>{title}</StyledWorkTitle>
                   <StyledDescription dangerouslySetInnerHTML={{ __html: html }} />
                   {tech && (
-                    <StyledTechList>
-                      {tech.map((tech, i) => (
-                        <li key={i}>{tech}</li>
+                    <StyledTags>
+                      {tech.map((t, j) => (
+                        <StyledTag key={j}>{t}</StyledTag>
                       ))}
-                    </StyledTechList>
+                    </StyledTags>
                   )}
-                  <StyledLinkWrapper>
-                    {github && (
-                      <a
-                        href={github}
-                        target="_blank"
-                        rel="nofollow noopener noreferrer"
-                        aria-label="GitHub Link">
-                        <FormattedIcon name="GitHub" />
-                      </a>
-                    )}
-                    {external && (
-                      <a
-                        href={external}
-                        target="_blank"
-                        rel="nofollow noopener noreferrer"
-                        aria-label="External Link">
-                        <FormattedIcon name="External" />
-                      </a>
-                    )}
-                  </StyledLinkWrapper>
                 </StyledContent>
-
-                <StyledImgContainer
-                  href={external ? external : github ? github : '#'}
-                  target="_blank"
-                  rel="nofollow noopener noreferrer">
-                  <StyledFeaturedImg fluid={cover.childImageSharp.fluid} alt={title} />
-                </StyledImgContainer>
-              </StyledProject>
+                <StyledYear>
+                  {year}
+                  <StyledArrow>↗</StyledArrow>
+                </StyledYear>
+              </StyledRow>
             );
           })}
-      </div>
-    </StyledContainer>
+        </StyledList>
+      </StyledInner>
+    </StyledSection>
   );
 };
 

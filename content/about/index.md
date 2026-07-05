@@ -1,24 +1,38 @@
 ---
-title: 'About Me'
-avatar: 'me.jpg'
-skills:
-  - Javascript (ES6+)
-  - React
-  - React Native
-  - HTML
-  - CSS
-  - Python
-  - C++
+title: 'About'
+skillGroups:
+  - label: 'Frontend'
+    items:
+      - 'React'
+      - 'Next.js'
+      - 'TypeScript'
+      - 'Tailwind'
+      - 'MUI'
+      - 'Framer Motion'
+  - label: 'Performance'
+    items:
+      - 'SSR'
+      - 'SSG'
+      - 'PWA'
+      - 'Virtualization'
+      - 'Core Web Vitals'
+      - 'Micro-FE'
+  - label: 'Data / State'
+    items:
+      - 'TanStack Query'
+      - 'Redux'
+      - 'Zustand'
+      - 'GraphQL'
+      - 'REST'
+  - label: 'Security / More'
+    items:
+      - 'CSP'
+      - 'Hardened headers'
+      - 'Sentry'
+      - 'React Native'
+      - 'Node.js'
 ---
 
-<!-- Hello! Interestingly, I got introduced to programming in my freshman year at [Birla Institute Of Technology,  Mesra](https://www.bitmesra.ac.in/) where I completed my Bachelors in Computer Science and Engineering (2016-2020) with [86.3% aggregate](https://drive.google.com/file/d/1G4UBPBP0mvWZLRdkF_EcpmKKGp7_OA8U/view?usp=sharing).
+I've shipped full products end-to-end as the only frontend engineer, and guided teams of up to six through migrations and re-architectures. What stays constant: an obsession with performance, accessibility, and interfaces that feel effortless under real load.
 
-I'm currently working as a developer for **Bell Canada** in the Amdocs Digital Delivery unit. My responsibilty includes Java/Spring based microservices development & testing. 
-
-I'm also an [Innovation Agent](https://drive.google.com/file/d/117KS9QnDrcg7dllcAzGz_b7qQPgR3pGs/view?usp=sharing) fostering the culture of creativity and innovation at Amdocs, India.
-
-I have been awarded as Winner in [Innovation Nugget](https://drive.google.com/file/d/1PzTZkXlQV9ldZxqmBbbO94uIqrhSwvcq/view?usp=sharing), Creativity Jam, [Design Thinking Hackathon](https://drive.google.com/file/d/1hXCATvKwzHCvctHtElsqFg5YIqabz22O/view?usp=sharing) and Runners-Up in [Project ICE Fair](https://drive.google.com/file/d/1exB19OoQ5dzU2mg4qbdkNutA25TGBWV3/view?usp=sharing) by Amdocs. -->
-
-I'm an experienced software engineer who constantly seeks out innovative solutions to everyday problems. In my several years in this industry, I've honed my analytical thinking and collaboration skills, and I love developing software that serves people on daily basis. I've also had the opportunity to serve as the software engineer lead for multiple projects.
-
-Here is a list of the technologies that I'm familiar with!
+Based in New Delhi — open to senior frontend roles at high-growth product companies where performance, scale, and UX are core.

@@ -1,24 +1,44 @@
 import React from 'react';
 import { graphql } from 'gatsby';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { Layout, Hero, About, Jobs, Featured, Projects, Contact } from '@components';
+import { Layout, HeaderV2, Hero, Impact, Featured, Jobs, About, Contact } from '@components';
 import styled from 'styled-components';
-import { Main } from '@styles';
 
-const StyledMainContainer = styled(Main)`
-  counter-reset: section;
+const ACCENT = '#FF4D23';
+
+const StyledRoot = styled.div`
+  background: #ece7da;
+  color: #111110;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+
+  ::selection {
+    background: ${ACCENT};
+    color: #111110;
+  }
 `;
 
 const IndexPage = ({ location, data }) => (
-  <Layout location={location}>
-    <StyledMainContainer className="fillHeight">
+  <Layout location={location} bare>
+    <Helmet>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet"
+      />
+    </Helmet>
+    <StyledRoot>
+      <HeaderV2 />
       <Hero data={data.hero.edges} />
-      <About data={data.about.edges} />
-      <Jobs data={data.jobs.edges} />
+      <Impact />
       <Featured data={data.featured.edges} />
-      <Projects data={data.projects.edges} />
+      <Jobs data={data.jobs.edges} />
+      <About data={data.about.edges} />
       <Contact data={data.contact.edges} />
-    </StyledMainContainer>
+    </StyledRoot>
   </Layout>
 );
 
@@ -35,10 +55,11 @@ export const pageQuery = graphql`
       edges {
         node {
           frontmatter {
-            title
-            name
-            subtitle
+            eyebrow
+            nameLine1
+            nameLine2
             buttonText
+            stats
           }
           html
         }
@@ -49,14 +70,10 @@ export const pageQuery = graphql`
         node {
           frontmatter {
             title
-            avatar {
-              childImageSharp {
-                fluid(maxWidth: 700, quality: 90, traceSVG: { color: "#64ffda" }) {
-                  ...GatsbyImageSharpFluid_withWebp_tracedSVG
-                }
-              }
+            skillGroups {
+              label
+              items
             }
-            skills
           }
           html
         }
@@ -72,7 +89,6 @@ export const pageQuery = graphql`
             title
             company
             range
-            url
           }
           html
         }
@@ -86,35 +102,8 @@ export const pageQuery = graphql`
         node {
           frontmatter {
             title
-            cover {
-              childImageSharp {
-                fluid(maxWidth: 700, quality: 90, traceSVG: { color: "#64ffda" }) {
-                  ...GatsbyImageSharpFluid_withWebp_tracedSVG
-                }
-              }
-            }
+            year
             tech
-            github
-            external
-          }
-          html
-        }
-      }
-    }
-    projects: allMarkdownRemark(
-      filter: {
-        fileAbsolutePath: { regex: "/projects/" }
-        frontmatter: { showInProjects: { ne: false } }
-      }
-      sort: { fields: [frontmatter___date], order: DESC }
-    ) {
-      edges {
-        node {
-          frontmatter {
-            title
-            tech
-            github
-            external
           }
           html
         }
@@ -127,7 +116,6 @@ export const pageQuery = graphql`
             title
             buttonText
           }
-          html
         }
       }
     }

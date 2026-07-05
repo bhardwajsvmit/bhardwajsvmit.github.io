@@ -1,256 +1,118 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import sr from '@utils/sr';
 import { srConfig } from '@config';
 import styled from 'styled-components';
-import { theme, mixins, media, Section, Heading } from '@styles';
-const { colors, fontSizes, fonts } = theme;
+import { media } from '@styles';
 
-const StyledContainer = styled(Section)`
-  position: relative;
-  max-width: 700px;
+const INK = '#111110';
+const CREAM = '#ECE7DA';
+const ACCENT = '#FF4D23';
+const RULE = '#2b2a27';
+
+const StyledSection = styled.section`
+  background: ${INK};
+  color: ${CREAM};
+  padding: 96px 34px;
 `;
-const StyledTabs = styled.div`
-  display: flex;
-  align-items: flex-start;
-  position: relative;
-  ${media.thone`
-    display: block;
-  `};
+const StyledInner = styled.div`
+  max-width: 1500px;
+  margin: 0 auto;
 `;
-const StyledTabList = styled.ul`
-  display: block;
-  position: relative;
-  width: max-content;
-  z-index: 3;
-  padding: 0;
-  margin: 0;
-  list-style: none;
+const StyledEyebrow = styled.div`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: ${ACCENT};
+  margin-bottom: 14px;
+`;
+const StyledTitle = styled.h2`
+  margin: 0 0 50px;
+  color: ${CREAM};
+  font-weight: 800;
+  font-size: clamp(34px, 5vw, 72px);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+`;
+const StyledList = styled.div`
+  border-top: 2px solid ${RULE};
+`;
+const StyledRow = styled.div`
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  padding: 26px 10px;
+  border-bottom: 2px solid ${RULE};
+  transition: background 0.26s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.26s cubic-bezier(0.2, 0.7, 0.2, 1),
+    padding-left 0.26s cubic-bezier(0.2, 0.7, 0.2, 1);
+  ${media.thone`grid-template-columns: 1fr;`};
 
-  ${media.thone`
-    display: flex;
-    overflow-x: scroll;
-    margin-bottom: 30px;
-    width: calc(100% + 100px);
-    margin-left: -50px;
-  `};
-  ${media.phablet`
-    width: calc(100% + 50px);
-    margin-left: -25px;
-  `};
-
-  li {
-    &:first-of-type {
-      ${media.thone`
-        margin-left: 50px;
-      `};
-      ${media.phablet`
-        margin-left: 25px;
-      `};
-    }
-    &:last-of-type {
-      ${media.thone`
-        padding-right: 50px;
-      `};
-      ${media.phablet`
-        padding-right: 25px;
-      `};
-    }
+  &:hover {
+    background: ${ACCENT};
+    color: ${INK};
+    padding-left: 22px;
   }
 `;
-const StyledTabButton = styled.button`
-  ${mixins.link};
-  display: flex;
-  align-items: center;
-  width: 100%;
-  background-color: transparent;
-  height: ${theme.tabHeight}px;
-  padding: 0 20px 2px;
-  transition: ${theme.transition};
-  border-left: 2px solid ${colors.lightestNavy};
-  text-align: left;
-  white-space: nowrap;
-  font-family: ${fonts.SFMono};
-  font-size: ${fontSizes.smish};
-  color: ${props => (props.isActive ? colors.green : colors.slate)};
-  ${media.tablet`padding: 0 15px 2px;`};
-  ${media.thone`
-    ${mixins.flexCenter};
-    padding: 0 15px;
-    text-align: center;
-    border-left: 0;
-    border-bottom: 2px solid ${colors.lightestNavy};
-    min-width: 120px;
-  `};
-  &:hover,
-  &:focus {
-    background-color: ${colors.lightNavy};
-  }
+const StyledDate = styled.div`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.03em;
 `;
-const StyledHighlight = styled.span`
-  display: block;
-  background: ${colors.green};
-  width: 2px;
-  height: ${theme.tabHeight}px;
-  border-radius: ${theme.borderRadius};
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-  transition-delay: 0.1s;
-  z-index: 10;
-  transform: translateY(
-    ${props => (props.activeTabId > 0 ? props.activeTabId * theme.tabHeight : 0)}px
-  );
-  ${media.thone`
-    width: 100%;
-    max-width: ${theme.tabWidth}px;
-    height: 2px;
-    top: auto;
-    bottom: 0;
-    transform: translateX(
-      ${props => (props.activeTabId > 0 ? props.activeTabId * theme.tabWidth : 0)}px
-    );
-    margin-left: 50px;
-  `};
-  ${media.phablet`
-    margin-left: 25px;
-  `};
-`;
-const StyledTabContent = styled.div`
-  position: relative;
-  width: 100%;
-  height: auto;
-  padding-top: 12px;
-  padding-left: 30px;
-  ${media.tablet`padding-left: 20px;`};
-  ${media.thone`padding-left: 0;`};
-
-  ul {
-    ${mixins.fancyList};
-  }
-  a {
-    ${mixins.inlineLink};
-  }
-`;
-const StyledJobTitle = styled.h4`
-  color: ${colors.lightestSlate};
-  font-size: ${fontSizes.xxl};
-  font-weight: 500;
-  margin-bottom: 5px;
+const StyledJobTitle = styled.div`
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 28px);
+  letter-spacing: -0.01em;
 `;
 const StyledCompany = styled.span`
-  color: ${colors.green};
+  opacity: 0.6;
+  font-weight: 400;
 `;
-const StyledJobDetails = styled.h5`
-  font-family: ${fonts.SFMono};
-  font-size: ${fontSizes.smish};
-  font-weight: normal;
-  letter-spacing: 0.05em;
-  color: ${colors.lightSlate};
-  margin-bottom: 30px;
-  svg {
-    width: 15px;
-  }
+const StyledDescription = styled.p`
+  margin: 8px 0 0;
+  max-width: 820px;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.55;
+  opacity: 0.82;
 `;
 
 const Jobs = ({ data }) => {
-  const [activeTabId, setActiveTabId] = useState(0);
-  const [tabFocus, setTabFocus] = useState(null);
-  const tabs = useRef([]);
+  const revealTitle = useRef(null);
+  const revealRows = useRef([]);
+  revealRows.current = [];
+  const addReveal = el => el && revealRows.current.push(el);
 
-  const revealContainer = useRef(null);
-  useEffect(() => sr.reveal(revealContainer.current, srConfig()), []);
-
-  const focusTab = () => {
-    if (tabs.current[tabFocus]) {
-      tabs.current[tabFocus].focus();
-    } else {
-      // If we're at the end, go to the start
-      if (tabFocus >= tabs.current.length) {
-        setTabFocus(0);
-      }
-      // If we're at the start, move to the end
-      if (tabFocus < 0) {
-        setTabFocus(tabs.current.length - 1);
-      }
-    }
-  };
-
-  // Only re-run the effect if tabFocus changes
-  useEffect(() => focusTab(), [tabFocus]);
-
-  const onKeyPressed = e => {
-    if (e.keyCode === 38 || e.keyCode === 40) {
-      e.preventDefault();
-      if (e.keyCode === 40) {
-        // Move down
-        setTabFocus(tabFocus + 1);
-      } else if (e.keyCode === 38) {
-        // Move up
-        setTabFocus(tabFocus - 1);
-      }
-    }
-  };
+  useEffect(() => {
+    sr.reveal(revealTitle.current, srConfig());
+    revealRows.current.forEach((el, i) => sr.reveal(el, srConfig(i * 80)));
+  }, []);
 
   return (
-    <StyledContainer id="jobs" ref={revealContainer}>
-      <Heading>Where I&apos;ve Worked</Heading>
-      <StyledTabs>
-        <StyledTabList role="tablist" aria-label="Job tabs" onKeyDown={e => onKeyPressed(e)}>
+    <StyledSection id="timeline">
+      <StyledInner>
+        <StyledEyebrow>[ 03 ] Experience</StyledEyebrow>
+        <StyledTitle ref={revealTitle}>Five years, four teams.</StyledTitle>
+        <StyledList>
           {data &&
             data.map(({ node }, i) => {
-              const { company } = node.frontmatter;
+              const { frontmatter, html } = node;
+              const { title, company, range } = frontmatter;
               return (
-                <li key={i}>
-                  <StyledTabButton
-                    isActive={activeTabId === i}
-                    onClick={() => setActiveTabId(i)}
-                    ref={el => (tabs.current[i] = el)}
-                    id={`tab-${i}`}
-                    role="tab"
-                    aria-selected={activeTabId === i ? true : false}
-                    aria-controls={`panel-${i}`}
-                    tabIndex={activeTabId === i ? '0' : '-1'}>
-                    <span>{company}</span>
-                  </StyledTabButton>
-                </li>
+                <StyledRow key={i} ref={addReveal} data-row>
+                  <StyledDate>{range.toUpperCase()}</StyledDate>
+                  <div>
+                    <StyledJobTitle>
+                      {title} <StyledCompany>— {company}</StyledCompany>
+                    </StyledJobTitle>
+                    <StyledDescription dangerouslySetInnerHTML={{ __html: html }} />
+                  </div>
+                </StyledRow>
               );
             })}
-          <StyledHighlight activeTabId={activeTabId} />
-        </StyledTabList>
-
-        {data &&
-          data.map(({ node }, i) => {
-            const { frontmatter, html } = node;
-            const { title, url, company, range } = frontmatter;
-            return (
-              <StyledTabContent
-                key={i}
-                isActive={activeTabId === i}
-                id={`panel-${i}`}
-                role="tabpanel"
-                aria-labelledby={`tab-${i}`}
-                tabIndex={activeTabId === i ? '0' : '-1'}
-                hidden={activeTabId !== i}>
-                <StyledJobTitle>
-                  <span>{title}</span>
-                  <StyledCompany>
-                    <span>&nbsp;@&nbsp;</span>
-                    <a href={url} target="_blank" rel="nofollow noopener noreferrer">
-                      {company}
-                    </a>
-                  </StyledCompany>
-                </StyledJobTitle>
-                <StyledJobDetails>
-                  <span>{range}</span>
-                </StyledJobDetails>
-                <div dangerouslySetInnerHTML={{ __html: html }} />
-              </StyledTabContent>
-            );
-          })}
-      </StyledTabs>
-    </StyledContainer>
+        </StyledList>
+      </StyledInner>
+    </StyledSection>
   );
 };
 
