@@ -85,11 +85,11 @@ const StyledSkillItems = styled.div`
 
 const About = () => {
   const { skillGroups, html } = about;
-  const revealContainer = useRef(null);
+  const revealContainer = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const sr = getSr();
-    sr && sr.reveal(revealContainer.current, srConfig());
+    sr && sr.reveal(revealContainer.current!, srConfig());
   }, []);
 
   return (

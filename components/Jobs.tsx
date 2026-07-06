@@ -79,15 +79,17 @@ const StyledDescription = styled.div`
 `;
 
 const Jobs = () => {
-  const revealTitle = useRef(null);
-  const revealRows = useRef([]);
-  revealRows.current = [];
-  const addReveal = el => el && revealRows.current.push(el);
+  const revealTitle = useRef<HTMLHeadingElement | null>(null);
+  const revealMap = useRef(new Map<number, HTMLElement>());
+  const addReveal = (key: number, el: HTMLElement | null) => {
+    if (el) revealMap.current.set(key, el);
+    else revealMap.current.delete(key);
+  };
 
   useEffect(() => {
     const sr = getSr();
-    sr && sr.reveal(revealTitle.current, srConfig());
-    revealRows.current.forEach((el, i) => sr && sr.reveal(el, srConfig(i * 80)));
+    sr && sr.reveal(revealTitle.current!, srConfig());
+    Array.from(revealMap.current.values()).forEach((el, i) => sr && sr.reveal(el, srConfig(i * 80)));
   }, []);
 
   return (
@@ -99,7 +101,7 @@ const Jobs = () => {
           {jobs.map((item, i) => {
             const { title, company, range, html } = item;
             return (
-              <StyledRow key={i} ref={addReveal} data-row>
+              <StyledRow key={i} ref={el => addReveal(i, el)} data-row>
                 <StyledDate>{range.toUpperCase()}</StyledDate>
                 <div>
                   <StyledJobTitle>

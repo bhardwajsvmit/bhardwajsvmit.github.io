@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { getSr } from '@/lib/sr';
-import { srConfig, stats } from '@/data/content';
+import { srConfig, stats, type Stat as StatData } from '@/data/content';
 import { media } from '@/lib/media';
 
 const INK = '#111110';
@@ -48,9 +48,17 @@ const StyledCell = styled.div`
   padding: 34px 26px 30px;
   border-bottom: 2px solid ${CREAM};
   border-right: 2px solid ${RULE};
-  &:last-of-type {
+  &:nth-child(4n) {
     border-right: none;
   }
+  ${media.tablet`
+    &:nth-child(4n) {
+      border-right: 2px solid ${RULE};
+    }
+    &:nth-child(2n) {
+      border-right: none;
+    }
+  `};
 `;
 const StyledNumber = styled.div`
   font-weight: 800;
@@ -69,14 +77,14 @@ const StyledLabel = styled.div`
   letter-spacing: 0.04em;
 `;
 
-const Stat = ({ value, prefix, suffix, label, delay }) => {
-  const numRef = useRef(null);
-  const revealRef = useRef(null);
+const Stat = ({ value, prefix, suffix, label, delay }: StatData & { delay: number }) => {
+  const numRef = useRef<HTMLSpanElement | null>(null);
+  const revealRef = useRef<HTMLDivElement | null>(null);
   const doneRef = useRef(false);
 
   useEffect(() => {
     const sr = getSr();
-    sr && sr.reveal(revealRef.current, srConfig(delay));
+    sr && sr.reveal(revealRef.current!, srConfig(delay));
   }, [delay]);
 
   useEffect(() => {
@@ -89,7 +97,7 @@ const Stat = ({ value, prefix, suffix, label, delay }) => {
           doneRef.current = true;
           const dur = 1700;
           const start = performance.now();
-          const tick = now => {
+          const tick = (now: number) => {
             const p = Math.min((now - start) / dur, 1);
             const eased = 1 - Math.pow(1 - p, 3);
             el.textContent = Math.round(value * eased) + (p > 0.05 ? suffix || '' : '');
@@ -124,13 +132,13 @@ const Stat = ({ value, prefix, suffix, label, delay }) => {
 };
 
 const Impact = () => {
-  const eyebrowRef = useRef(null);
-  const titleRef = useRef(null);
+  const eyebrowRef = useRef<HTMLDivElement | null>(null);
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
 
   useEffect(() => {
     const sr = getSr();
-    sr && sr.reveal(eyebrowRef.current, srConfig());
-    sr && sr.reveal(titleRef.current, srConfig(60));
+    sr && sr.reveal(eyebrowRef.current!, srConfig());
+    sr && sr.reveal(titleRef.current!, srConfig(60));
   }, []);
 
   return (

@@ -1,13 +1,15 @@
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import StyledComponentsRegistry from '@/lib/registry';
 import GlobalStyle from '@/components/GlobalStyle';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Sumit Bhardwaj | Senior Frontend Engineer',
   description:
     'Sumit Bhardwaj is a Senior Frontend Engineer who takes products from 0→1 and scales them to millions of users — performance, SSR/SEO, design systems, and security.',
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>

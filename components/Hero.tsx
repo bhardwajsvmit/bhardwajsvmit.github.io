@@ -208,21 +208,23 @@ const StyledMarqueeInner = styled.div`
 const Hero = () => {
   const { eyebrow, nameLine1, nameLine2, buttonText, stats, html } = hero;
 
-  const sectionRef = useRef(null);
-  const blobRef = useRef(null);
-  const cursorRef = useRef(null);
-  const eyebrowRef = useRef(null);
-  const eyebrowInkRef = useRef(null);
-  const name1Ref = useRef(null);
-  const name2Ref = useRef(null);
-  const marqueeRef = useRef(null);
-  const revealRefs = useRef([]);
-  revealRefs.current = [];
-  const addReveal = el => el && revealRefs.current.push(el);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const blobRef = useRef<HTMLDivElement | null>(null);
+  const cursorRef = useRef<HTMLDivElement | null>(null);
+  const eyebrowRef = useRef<HTMLDivElement | null>(null);
+  const eyebrowInkRef = useRef<HTMLDivElement | null>(null);
+  const name1Ref = useRef<HTMLSpanElement | null>(null);
+  const name2Ref = useRef<HTMLSpanElement | null>(null);
+  const marqueeRef = useRef<HTMLDivElement | null>(null);
+  const revealMap = useRef(new Map<number, HTMLElement>());
+  const addReveal = (key: number, el: HTMLElement | null) => {
+    if (el) revealMap.current.set(key, el);
+    else revealMap.current.delete(key);
+  };
 
   useEffect(() => {
     const sr = getSr();
-    revealRefs.current.forEach((el, i) => sr && sr.reveal(el, srConfig(i * 100)));
+    Array.from(revealMap.current.values()).forEach((el, i) => sr && sr.reveal(el, srConfig(i * 100)));
   }, []);
 
   useEffect(() => {
@@ -232,18 +234,18 @@ const Hero = () => {
       ry = -100;
     let scale = 1,
       targetScale = 1;
-    let raf;
+    let raf: number;
     let shown = false;
 
-    const onMove = e => {
+    const onMove = (e: MouseEvent) => {
       cx = e.clientX;
       cy = e.clientY;
       if (!shown && cursorRef.current) {
         cursorRef.current.style.display = 'block';
         shown = true;
       }
-      const t = e.target;
-      const hit = t && t.closest && t.closest('a, [data-work], [data-row], .skill');
+      const t = e.target as HTMLElement | null;
+      const hit = t?.closest?.('a, [data-work], [data-row], .skill');
       targetScale = hit ? 2.1 : 1;
     };
     window.addEventListener('pointermove', onMove);
@@ -300,7 +302,7 @@ const Hero = () => {
     let last = performance.now();
     let mult = 1,
       targetMult = 1;
-    let raf;
+    let raf: number;
 
     const onEnter = () => {
       targetMult = 0.14;
@@ -311,7 +313,7 @@ const Hero = () => {
     el.addEventListener('pointerenter', onEnter);
     el.addEventListener('pointerleave', onLeave);
 
-    const loop = now => {
+    const loop = (now: number) => {
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       mult += (targetMult - mult) * 0.07;
@@ -337,8 +339,8 @@ const Hero = () => {
         <StyledBlob ref={blobRef} />
         <StyledInner>
           <StyledEyebrow
-            ref={el => {
-              addReveal(el);
+            ref={(el: HTMLDivElement | null) => {
+              addReveal(0, el);
               eyebrowRef.current = el;
             }}>
             <StyledEyebrowLine />
@@ -354,7 +356,7 @@ const Hero = () => {
             <StyledNameLineStroke ref={name2Ref}>{nameLine2}</StyledNameLineStroke>
           </StyledName>
 
-          <StyledIntroRow ref={addReveal}>
+          <StyledIntroRow ref={el => addReveal(1, el)}>
             <StyledIntro dangerouslySetInnerHTML={{ __html: html }} />
             <StyledCta href="#work">
               {buttonText} <StyledArrow>↘</StyledArrow>
@@ -362,7 +364,7 @@ const Hero = () => {
           </StyledIntroRow>
         </StyledInner>
 
-        <StyledStatStrip ref={addReveal}>
+        <StyledStatStrip ref={el => addReveal(2, el)}>
           {stats &&
             stats.map((stat, i) => (
               <React.Fragment key={i}>
