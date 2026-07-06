@@ -1,87 +1,8 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import { useEffect, useRef } from 'react';
 import { getSr } from '@/lib/sr';
 import { srConfig, about } from '@/data/content';
-import { media } from '@/lib/media';
-
-const INK = '#111110';
-const CREAM = '#ECE7DA';
-const ACCENT = '#FF4D23';
-
-const StyledSection = styled.section`
-  background: ${CREAM};
-  padding: 96px 34px;
-`;
-const StyledInner = styled.div`
-  max-width: 1500px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 60px;
-  align-items: start;
-  ${media.tablet`grid-template-columns: 1fr;`};
-`;
-const StyledEyebrow = styled.div`
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: ${ACCENT};
-  margin-bottom: 14px;
-`;
-const StyledTitle = styled.h2`
-  margin: 0;
-  color: ${INK};
-  font-weight: 800;
-  font-size: clamp(30px, 4vw, 58px);
-  letter-spacing: -0.03em;
-  line-height: 0.98;
-  mark {
-    background: none;
-    color: ${ACCENT};
-  }
-`;
-const StyledBody = styled.div`
-  p {
-    margin: 26px 0 0;
-    max-width: 600px;
-    font-size: 17px;
-    font-weight: 500;
-    line-height: 1.6;
-    color: #1c1b18;
-  }
-`;
-const StyledSkills = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 2px solid ${INK};
-`;
-const StyledSkillGroup = styled.div`
-  padding: 20px 22px;
-  border-bottom: 2px solid ${INK};
-  transition: background 0.24s ease, color 0.24s ease;
-  &:last-of-type {
-    border-bottom: none;
-  }
-  &:hover {
-    background: ${INK};
-    color: ${CREAM};
-  }
-`;
-const StyledSkillLabel = styled.div`
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: ${ACCENT};
-`;
-const StyledSkillItems = styled.div`
-  margin-top: 8px;
-  font-weight: 600;
-  font-size: 15px;
-`;
 
 const About = () => {
   const { skillGroups, html } = about;
@@ -93,26 +14,31 @@ const About = () => {
   }, []);
 
   return (
-    <StyledSection id="about" ref={revealContainer}>
-      <StyledInner>
+    <section id="about" ref={revealContainer} className="bg-cream px-[34px] py-24 max-thone:px-5 max-thone:py-14">
+      <div className="mx-auto grid max-w-[1500px] grid-cols-[1.1fr_0.9fr] items-start gap-[60px] max-tablet:grid-cols-1">
         <div>
-          <StyledEyebrow>[ 04 ] About</StyledEyebrow>
-          <StyledTitle>
+          <div className="mb-3.5 font-mono text-[13px] tracking-[0.16em] text-accent uppercase">[ 04 ] About</div>
+          <h2 className="m-0 text-[clamp(30px,4vw,58px)] leading-[0.98] font-extrabold tracking-[-0.03em] text-ink [&_mark]:bg-transparent [&_mark]:text-accent">
             Solo architect <mark>&amp;</mark> team lead.
-          </StyledTitle>
-          <StyledBody dangerouslySetInnerHTML={{ __html: html }} />
+          </h2>
+          <div
+            className="[&_p]:mt-[26px] [&_p]:max-w-[600px] [&_p]:text-[17px] [&_p]:font-medium [&_p]:leading-[1.6] [&_p]:text-[#1c1b18]"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
         </div>
-        <StyledSkills>
+        <div className="flex flex-col border-2 border-ink">
           {skillGroups &&
             skillGroups.map((group, i) => (
-              <StyledSkillGroup key={i} className="skill">
-                <StyledSkillLabel>{group.label}</StyledSkillLabel>
-                <StyledSkillItems>{group.items.join(' · ')}</StyledSkillItems>
-              </StyledSkillGroup>
+              <div
+                key={i}
+                className="skill border-b-2 border-ink px-[22px] py-5 [transition:background_0.24s_ease,color_0.24s_ease] last:border-b-0 hover:bg-ink hover:text-cream">
+                <div className="font-mono text-[11px] tracking-[0.1em] text-accent uppercase">{group.label}</div>
+                <div className="mt-2 text-[15px] font-semibold">{group.items.join(' · ')}</div>
+              </div>
             ))}
-        </StyledSkills>
-      </StyledInner>
-    </StyledSection>
+        </div>
+      </div>
+    </section>
   );
 };
 

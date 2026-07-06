@@ -1,119 +1,8 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import { useEffect, useRef } from 'react';
 import { getSr } from '@/lib/sr';
 import { srConfig, featured } from '@/data/content';
-
-const INK = '#111110';
-const CREAM = '#ECE7DA';
-const ACCENT = '#FF4D23';
-
-const StyledSection = styled.section`
-  background: ${CREAM};
-  padding: 96px 34px;
-`;
-const StyledInner = styled.div`
-  max-width: 1500px;
-  margin: 0 auto;
-`;
-const StyledEyebrow = styled.div`
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: ${ACCENT};
-  margin-bottom: 14px;
-`;
-const StyledTitle = styled.h2`
-  margin: 0 0 50px;
-  color: ${INK};
-  font-weight: 800;
-  font-size: clamp(34px, 5vw, 72px);
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-`;
-const StyledList = styled.div`
-  border-top: 2px solid ${INK};
-`;
-const StyledWorkTitle = styled.h3`
-  margin: 0;
-  color: inherit;
-  font-weight: 800;
-  font-size: clamp(30px, 4.2vw, 60px);
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-  transition: transform 0.34s cubic-bezier(0.2, 0.7, 0.2, 1);
-`;
-const StyledArrow = styled.div`
-  font-size: 26px;
-  margin-top: 8px;
-  display: inline-block;
-  transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.4, 1), color 0.3s ease;
-`;
-const StyledRow = styled.article`
-  position: relative;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 30px;
-  align-items: start;
-  padding: 36px 8px;
-  border-bottom: 2px solid ${INK};
-  cursor: pointer;
-  transition: background 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
-    padding 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
-
-  &:hover {
-    background: ${INK};
-    color: ${CREAM};
-    padding-left: 24px;
-    padding-right: 24px;
-    ${StyledWorkTitle} {
-      transform: translateX(12px);
-    }
-    ${StyledArrow} {
-      transform: translate(7px, -7px);
-      color: ${ACCENT};
-    }
-  }
-`;
-const StyledIndex = styled.div`
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
-  font-size: 15px;
-  color: ${ACCENT};
-`;
-const StyledContent = styled.div`
-  min-width: 0;
-`;
-const StyledDescription = styled.div`
-  margin: 14px 0 0;
-  max-width: 680px;
-  font-size: 15.5px;
-  font-weight: 500;
-  line-height: 1.6;
-`;
-const StyledTags = styled.div`
-  margin-top: 18px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-`;
-const StyledTag = styled.span`
-  border: 1.5px solid currentColor;
-  padding: 5px 11px;
-  border-radius: 100px;
-`;
-const StyledYear = styled.div`
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  text-align: right;
-  white-space: nowrap;
-`;
 
 const Featured = () => {
   const revealTitle = useRef<HTMLHeadingElement | null>(null);
@@ -130,37 +19,54 @@ const Featured = () => {
   }, []);
 
   return (
-    <StyledSection id="work">
-      <StyledInner>
-        <StyledEyebrow>[ 02 ] Selected work</StyledEyebrow>
-        <StyledTitle ref={revealTitle}>Things I&rsquo;ve built &amp; owned.</StyledTitle>
-        <StyledList>
+    <section id="work" className="bg-cream px-[34px] py-24 max-thone:px-5 max-thone:py-14">
+      <div className="mx-auto max-w-[1500px]">
+        <div className="mb-3.5 font-mono text-[13px] tracking-[0.16em] text-accent uppercase">[ 02 ] Selected work</div>
+        <h2
+          ref={revealTitle}
+          className="m-0 mb-[50px] text-[clamp(34px,5vw,72px)] leading-[0.95] font-extrabold tracking-[-0.03em] text-ink">
+          Things I&rsquo;ve built &amp; owned.
+        </h2>
+        <div className="border-t-2 border-ink">
           {featured.map((item, i) => {
             const { title, year, tech, html } = item;
             return (
-              <StyledRow key={i} ref={el => addReveal(i, el)} data-work>
-                <StyledIndex>{String(i + 1).padStart(2, '0')}</StyledIndex>
-                <StyledContent>
-                  <StyledWorkTitle>{title}</StyledWorkTitle>
-                  <StyledDescription dangerouslySetInnerHTML={{ __html: html }} />
+              <article
+                key={i}
+                ref={el => addReveal(i, el)}
+                data-work
+                className="group relative grid cursor-pointer grid-cols-[auto_1fr_auto] items-start gap-[30px] border-b-2 border-ink px-2 py-9 max-thone:grid-cols-[auto_1fr] max-thone:gap-x-4 max-thone:gap-y-3 max-thone:py-7 [transition:background_0.3s_cubic-bezier(0.2,0.7,0.2,1),color_0.3s_cubic-bezier(0.2,0.7,0.2,1),padding_0.3s_cubic-bezier(0.2,0.7,0.2,1)] hover:bg-ink hover:px-6 hover:text-cream">
+                <div className="font-mono text-[15px] font-bold text-accent">{String(i + 1).padStart(2, '0')}</div>
+                <div className="min-w-0 max-thone:col-span-2">
+                  <h3 className="m-0 text-[clamp(30px,4.2vw,60px)] leading-[0.95] font-extrabold tracking-[-0.03em] text-inherit [transition:transform_0.34s_cubic-bezier(0.2,0.7,0.2,1)] group-hover:[transform:translateX(12px)]">
+                    {title}
+                  </h3>
+                  <div
+                    className="mt-3.5 max-w-[680px] text-[15.5px] font-medium leading-[1.6]"
+                    dangerouslySetInnerHTML={{ __html: html }}
+                  />
                   {tech && (
-                    <StyledTags>
+                    <div className="mt-[18px] flex flex-wrap gap-2 font-mono text-[11.5px] tracking-[0.04em] uppercase">
                       {tech.map((t, j) => (
-                        <StyledTag key={j}>{t}</StyledTag>
+                        <span key={j} className="rounded-full border-[1.5px] border-current px-[11px] py-[5px]">
+                          {t}
+                        </span>
                       ))}
-                    </StyledTags>
+                    </div>
                   )}
-                </StyledContent>
-                <StyledYear>
+                </div>
+                <div className="font-mono text-xs whitespace-nowrap text-right max-thone:col-start-2 max-thone:row-start-1">
                   {year}
-                  <StyledArrow>↗</StyledArrow>
-                </StyledYear>
-              </StyledRow>
+                  <div className="mt-2 inline-block text-[26px] [transition:transform_0.3s_cubic-bezier(0.3,1.4,0.4,1),color_0.3s_ease] group-hover:text-accent group-hover:[transform:translate(7px,-7px)]">
+                    ↗
+                  </div>
+                </div>
+              </article>
             );
           })}
-        </StyledList>
-      </StyledInner>
-    </StyledSection>
+        </div>
+      </div>
+    </section>
   );
 };
 

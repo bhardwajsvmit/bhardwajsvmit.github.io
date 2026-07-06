@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import StyledComponentsRegistry from '@/lib/registry';
-import GlobalStyle from '@/components/GlobalStyle';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Sumit Bhardwaj | Senior Frontend Engineer',
@@ -20,12 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
       </head>
-      <body style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
-        <StyledComponentsRegistry>
-          <GlobalStyle />
-          {children}
-        </StyledComponentsRegistry>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

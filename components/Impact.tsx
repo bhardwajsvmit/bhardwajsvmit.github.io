@@ -1,81 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import { getSr } from '@/lib/sr';
 import { srConfig, stats, type Stat as StatData } from '@/data/content';
-import { media } from '@/lib/media';
-
-const INK = '#111110';
-const CREAM = '#ECE7DA';
-const ACCENT = '#FF4D23';
-const RULE = '#2b2a27';
-
-const StyledSection = styled.section`
-  background: ${INK};
-  color: ${CREAM};
-  padding: 96px 34px;
-`;
-const StyledInner = styled.div`
-  max-width: 1500px;
-  margin: 0 auto;
-`;
-const StyledEyebrow = styled.div`
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: ${ACCENT};
-  margin-bottom: 14px;
-`;
-const StyledTitle = styled.h2`
-  margin: 0 0 56px;
-  color: ${CREAM};
-  font-weight: 800;
-  font-size: clamp(34px, 5vw, 72px);
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-  max-width: 1100px;
-`;
-const StyledGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border-top: 2px solid ${CREAM};
-  ${media.tablet`grid-template-columns: repeat(2, 1fr);`};
-`;
-const StyledCell = styled.div`
-  min-width: 0;
-  padding: 34px 26px 30px;
-  border-bottom: 2px solid ${CREAM};
-  border-right: 2px solid ${RULE};
-  &:nth-child(4n) {
-    border-right: none;
-  }
-  ${media.tablet`
-    &:nth-child(4n) {
-      border-right: 2px solid ${RULE};
-    }
-    &:nth-child(2n) {
-      border-right: none;
-    }
-  `};
-`;
-const StyledNumber = styled.div`
-  font-weight: 800;
-  font-size: clamp(48px, 6vw, 90px);
-  letter-spacing: -0.04em;
-  line-height: 1;
-  color: ${ACCENT};
-`;
-const StyledLabel = styled.div`
-  margin-top: 14px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12.5px;
-  line-height: 1.6;
-  color: #a7a499;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-`;
 
 const Stat = ({ value, prefix, suffix, label, delay }: StatData & { delay: number }) => {
   const numRef = useRef<HTMLSpanElement | null>(null);
@@ -114,20 +41,22 @@ const Stat = ({ value, prefix, suffix, label, delay }: StatData & { delay: numbe
   }, [value, suffix]);
 
   return (
-    <StyledCell ref={revealRef}>
-      <StyledNumber>
+    <div
+      ref={revealRef}
+      className="min-w-0 border-r-2 border-b-2 border-cream border-rule px-[26px] pt-[34px] pb-[30px] max-thone:px-3.5 max-thone:pt-6 max-thone:pb-5 [&:nth-child(4n)]:border-r-0 max-tablet:[&:nth-child(2n)]:border-r-0">
+      <div className="text-[clamp(48px,6vw,90px)] max-thone:text-[clamp(28px,9.5vw,44px)] leading-none font-extrabold tracking-[-0.04em] text-accent">
         {prefix}
         <span ref={numRef}>0</span>
-      </StyledNumber>
-      <StyledLabel>
+      </div>
+      <div className="mt-3.5 font-mono text-[12.5px] leading-[1.6] tracking-[0.04em] text-[#a7a499] uppercase">
         {label.split('\n').map((line, i) => (
           <React.Fragment key={i}>
             {i > 0 && <br />}
             {line}
           </React.Fragment>
         ))}
-      </StyledLabel>
-    </StyledCell>
+      </div>
+    </div>
   );
 };
 
@@ -142,17 +71,23 @@ const Impact = () => {
   }, []);
 
   return (
-    <StyledSection id="impact">
-      <StyledInner>
-        <StyledEyebrow ref={eyebrowRef}>[ 01 ] By the numbers</StyledEyebrow>
-        <StyledTitle ref={titleRef}>Numbers from shipping at scale.</StyledTitle>
-        <StyledGrid>
+    <section id="impact" className="bg-ink px-[34px] py-24 max-thone:px-5 max-thone:py-14 text-cream">
+      <div className="mx-auto max-w-[1500px]">
+        <div ref={eyebrowRef} className="mb-3.5 font-mono text-[13px] tracking-[0.16em] text-accent uppercase">
+          [ 01 ] By the numbers
+        </div>
+        <h2
+          ref={titleRef}
+          className="m-0 mb-14 max-w-[1100px] text-[clamp(34px,5vw,72px)] leading-[0.95] font-extrabold tracking-[-0.03em] text-cream">
+          Numbers from shipping at scale.
+        </h2>
+        <div className="grid grid-cols-4 border-t-2 border-cream max-tablet:grid-cols-2">
           {stats.map((stat, i) => (
             <Stat key={i} {...stat} delay={i * 90} />
           ))}
-        </StyledGrid>
-      </StyledInner>
-    </StyledSection>
+        </div>
+      </div>
+    </section>
   );
 };
 

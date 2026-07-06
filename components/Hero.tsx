@@ -1,14 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import { getSr } from '@/lib/sr';
 import { srConfig, hero } from '@/data/content';
-import { media } from '@/lib/media';
-
-const INK = '#111110';
-const CREAM = '#ECE7DA';
-const ACCENT = '#FF4D23';
 
 const MARQUEE_ITEMS = [
   'React',
@@ -21,189 +15,7 @@ const MARQUEE_ITEMS = [
   'PWA',
 ];
 
-const StyledCursorRing = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 30px;
-  height: 30px;
-  border: 2px solid ${ACCENT};
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-100px, -100px);
-  mix-blend-mode: difference;
-  display: none;
-  ${media.tablet`display: none !important;`};
-`;
-
-const StyledSection = styled.section`
-  position: relative;
-  overflow: hidden;
-  min-height: calc(100vh - 59px);
-  padding: 48px 34px 36px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-const StyledBlob = styled.div`
-  position: absolute;
-  width: 380px;
-  height: 380px;
-  border-radius: 50%;
-  background: ${ACCENT};
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  left: 0;
-  top: 0;
-  transform: translate(-50%, -50%);
-  will-change: transform;
-  opacity: 0;
-  filter: blur(2px);
-`;
-const StyledInner = styled.div`
-  position: relative;
-  z-index: 2;
-  max-width: 1500px;
-  margin: 0 auto;
-  width: 100%;
-`;
-const StyledEyebrow = styled.div`
-  position: relative;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: ${ACCENT};
-`;
-const StyledEyebrowLine = styled.span`
-  width: 42px;
-  height: 2px;
-  background: currentColor;
-  display: inline-block;
-`;
-const StyledEyebrowInk = styled.div`
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  color: ${INK};
-  clip-path: circle(0px at -999px -999px);
-  pointer-events: none;
-`;
-const StyledName = styled.h1`
-  margin: 18px 0 0;
-  color: ${INK};
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 0.82;
-  text-transform: uppercase;
-`;
-const StyledNameLine = styled.span`
-  display: block;
-  font-size: clamp(64px, 13.5vw, 232px);
-`;
-const StyledNameLineStroke = styled(StyledNameLine)`
-  color: transparent;
-  -webkit-text-stroke: clamp(1.5px, 0.32vw, 4px) ${INK};
-`;
-const StyledIntroRow = styled.div`
-  margin-top: 34px;
-  display: flex;
-  gap: 44px;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-`;
-const StyledIntro = styled.p`
-  margin: 0;
-  max-width: 560px;
-  font-size: clamp(17px, 1.7vw, 21px);
-  font-weight: 500;
-  line-height: 1.45;
-  color: #1c1b18;
-  mark {
-    background: ${ACCENT};
-    color: inherit;
-    padding: 0 6px;
-  }
-`;
-const StyledCta = styled.a`
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  background: ${INK};
-  color: ${CREAM};
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 18px 26px;
-  text-decoration: none;
-  box-shadow: 7px 7px 0 ${ACCENT};
-  transition: transform 0.2s cubic-bezier(0.34, 1.3, 0.4, 1),
-    box-shadow 0.2s cubic-bezier(0.34, 1.3, 0.4, 1), color 0.2s ease;
-  &:hover {
-    box-shadow: 0px 0px 0 ${ACCENT};
-    transform: translate(7px, 7px);
-    color: ${ACCENT};
-  }
-  &:active {
-    transform: translate(7px, 7px) scale(0.95);
-    box-shadow: 0 0 0 transparent;
-  }
-`;
-const StyledArrow = styled.span`
-  display: inline-block;
-  transition: transform 0.24s cubic-bezier(0.3, 1.5, 0.4, 1);
-  ${StyledCta}:hover & {
-    transform: translate(4px, 4px);
-  }
-`;
-const StyledStatStrip = styled.div`
-  position: relative;
-  z-index: 2;
-  margin-top: auto;
-  padding-top: 40px;
-  display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #6b685f;
-  span.sep {
-    color: ${ACCENT};
-  }
-`;
-const StyledMarqueeOuter = styled.div`
-  background: ${ACCENT};
-  color: ${INK};
-  border-top: 2px solid ${INK};
-  border-bottom: 2px solid ${INK};
-  padding: 18px 0;
-  overflow: hidden;
-`;
-const StyledMarqueeInner = styled.div`
-  display: flex;
-  gap: 30px;
-  width: max-content;
-  font-weight: 800;
-  font-size: clamp(26px, 3.4vw, 46px);
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  will-change: transform;
-`;
+const NAME_LINE_CLASS = 'block text-[clamp(64px,13.5vw,232px)]';
 
 const Hero = () => {
   const { eyebrow, nameLine1, nameLine2, buttonText, stats, html } = hero;
@@ -334,37 +146,66 @@ const Hero = () => {
 
   return (
     <>
-      <StyledCursorRing ref={cursorRef} />
-      <StyledSection ref={sectionRef} data-hero>
-        <StyledBlob ref={blobRef} />
-        <StyledInner>
-          <StyledEyebrow
+      <div
+        ref={cursorRef}
+        className="pointer-events-none fixed top-0 left-0 z-[9999] hidden h-[30px] w-[30px] rounded-full border-2 border-accent [mix-blend-mode:difference] [transform:translate(-100px,-100px)] max-tablet:hidden!"
+      />
+      <section
+        ref={sectionRef}
+        data-hero
+        className="relative flex min-h-[calc(100vh-59px)] flex-col justify-center overflow-hidden px-[34px] pt-12 pb-9 max-thone:px-5 max-thone:pt-10 max-thone:pb-7">
+        <div
+          ref={blobRef}
+          className="pointer-events-none absolute top-0 left-0 h-[380px] w-[380px] rounded-full bg-accent opacity-0 mix-blend-multiply blur-[2px] [transform:translate(-50%,-50%)] [will-change:transform]"
+        />
+        <div className="relative z-2 mx-auto w-full max-w-[1500px]">
+          <div
             ref={(el: HTMLDivElement | null) => {
               addReveal(0, el);
               eyebrowRef.current = el;
-            }}>
-            <StyledEyebrowLine />
+            }}
+            className="relative z-3 flex items-center gap-[14px] font-mono text-[13px] font-medium tracking-[0.14em] text-accent uppercase">
+            <span className="inline-block h-[2px] w-[42px] bg-current" />
             {eyebrow}
-            <StyledEyebrowInk ref={eyebrowInkRef} aria-hidden="true">
-              <StyledEyebrowLine />
+            <div
+              ref={eyebrowInkRef}
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 flex items-center gap-[14px] text-ink [clip-path:circle(0px_at_-999px_-999px)]">
+              <span className="inline-block h-[2px] w-[42px] bg-current" />
               {eyebrow}
-            </StyledEyebrowInk>
-          </StyledEyebrow>
+            </div>
+          </div>
 
-          <StyledName>
-            <StyledNameLine ref={name1Ref}>{nameLine1}</StyledNameLine>
-            <StyledNameLineStroke ref={name2Ref}>{nameLine2}</StyledNameLineStroke>
-          </StyledName>
+          <h1 className="mt-[18px] leading-[0.82] font-extrabold tracking-[-0.045em] text-ink uppercase">
+            <span ref={name1Ref} className={NAME_LINE_CLASS}>
+              {nameLine1}
+            </span>
+            <span
+              ref={name2Ref}
+              className={`${NAME_LINE_CLASS} text-transparent [-webkit-text-stroke:clamp(1.5px,0.32vw,4px)_#111110]`}>
+              {nameLine2}
+            </span>
+          </h1>
 
-          <StyledIntroRow ref={el => addReveal(1, el)}>
-            <StyledIntro dangerouslySetInnerHTML={{ __html: html }} />
-            <StyledCta href="#work">
-              {buttonText} <StyledArrow>↘</StyledArrow>
-            </StyledCta>
-          </StyledIntroRow>
-        </StyledInner>
+          <div ref={el => addReveal(1, el)} className="mt-[34px] flex flex-wrap items-end justify-between gap-[44px]">
+            <p
+              className="m-0 max-w-[560px] text-[clamp(17px,1.7vw,21px)] font-medium leading-[1.45] text-[#1c1b18] [&_mark]:bg-accent [&_mark]:px-1.5 [&_mark]:text-inherit"
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+            <a
+              href="#work"
+              className="group inline-flex flex-none items-center gap-[14px] bg-ink px-[26px] py-[18px] font-mono text-sm font-semibold tracking-[0.04em] text-cream uppercase no-underline shadow-[7px_7px_0_#FF4D23] [transition:transform_0.2s_cubic-bezier(0.34,1.3,0.4,1),box-shadow_0.2s_cubic-bezier(0.34,1.3,0.4,1),color_0.2s_ease] hover:text-accent hover:shadow-[0px_0px_0_#FF4D23] hover:[transform:translate(7px,7px)] active:shadow-[0_0_0_transparent] active:[transform:translate(7px,7px)_scale(0.95)]">
+              {buttonText}{' '}
+              <span className="inline-block [transition:transform_0.24s_cubic-bezier(0.3,1.5,0.4,1)] group-hover:[transform:translate(4px,4px)]">
+                ↘
+              </span>
+            </a>
+          </div>
+        </div>
 
-        <StyledStatStrip ref={el => addReveal(2, el)}>
+        <div
+          ref={el => addReveal(2, el)}
+          className="relative z-2 mt-auto flex flex-wrap gap-x-[30px] gap-y-2.5 pt-10 font-mono text-xs tracking-[0.06em] text-[#6b685f] uppercase max-thone:gap-x-3.5 max-thone:pt-8 [&_.sep]:text-accent">
           {stats &&
             stats.map((stat, i) => (
               <React.Fragment key={i}>
@@ -372,19 +213,21 @@ const Hero = () => {
                 <span>{stat}</span>
               </React.Fragment>
             ))}
-        </StyledStatStrip>
-      </StyledSection>
+        </div>
+      </section>
 
-      <StyledMarqueeOuter>
-        <StyledMarqueeInner ref={marqueeRef}>
+      <div className="overflow-hidden border-t-2 border-b-2 border-ink bg-accent py-[18px] text-ink">
+        <div
+          ref={marqueeRef}
+          className="flex w-max gap-[30px] text-[clamp(26px,3.4vw,46px)] font-extrabold tracking-[-0.02em] whitespace-nowrap uppercase [will-change:transform]">
           {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
             <React.Fragment key={i}>
               <span>{item}</span>
               <span>✦</span>
             </React.Fragment>
           ))}
-        </StyledMarqueeInner>
-      </StyledMarqueeOuter>
+        </div>
+      </div>
     </>
   );
 };
