@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "gatsby-develop",
+      "name": "portfolio-nextjs-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "develop"],
-      "port": 8000
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
     }
   ]
 }
