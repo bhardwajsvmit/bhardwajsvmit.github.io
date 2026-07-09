@@ -74,7 +74,7 @@ const Impact = () => {
     <section id="impact" className="bg-ink px-[34px] py-24 max-thone:px-5 max-thone:py-14 text-cream">
       <div className="mx-auto max-w-[1500px]">
         <div ref={eyebrowRef} className="mb-3.5 font-mono text-[13px] tracking-[0.16em] text-accent uppercase">
-          [ 01 ] By the numbers
+          {'{ 02 — BY THE NUMBERS }'}
         </div>
         <h2
           ref={titleRef}

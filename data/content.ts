@@ -53,7 +53,8 @@ export interface About {
 export interface Job {
   title: string;
   company: string;
-  range: string;
+  yearFrom: string;
+  yearTo: string;
   html: string;
 }
 
@@ -66,7 +67,6 @@ export interface FeaturedItem {
 
 export interface Contact {
   title: string;
-  buttonText: string;
 }
 
 export const email = 'bhardwajsvmit@gmail.com';
@@ -115,7 +115,7 @@ export const hero: Hero = {
   buttonText: 'See the work',
   stats: ['5+ yrs shipping', 'React · Next.js · TypeScript', '1st prize · $200K hackathon'],
   html:
-    "I take products from <mark>0&rarr;1</mark> — and from 300K to 2M weekly users. Frontend that holds up under real load: performance, SSR/SEO, design systems, security.",
+    'Frontend engineer who makes products <em>fast</em> — and keeps them that way. From <mark>0→1</mark> builds to 300K→2M weekly users: performance, SSR/SEO, design systems, security.',
 };
 
 export const about: About = {
@@ -136,30 +136,34 @@ export const jobs: Job[] = [
   {
     title: 'Senior Frontend Engineer',
     company: 'RareBetSports',
-    range: 'Sep 2024 — Now',
+    yearFrom: '2024',
+    yearTo: 'NOW',
     html:
-      '<p>Sole frontend engineer shipping a high-traffic fantasy-sports product end-to-end: onboarding, validation layer, nonce-based CSP middleware, virtualised leaderboards, and Framer Motion polish recognised with a $200K hackathon win.</p>',
+      '<p>Sole frontend engineer shipping a fantasy-sports product end-to-end: onboarding, validation layer, nonce-based CSP middleware, virtualised leaderboards, and a $200K hackathon win.</p>',
   },
   {
     title: 'Full Stack Developer',
     company: 'Parcel Inc.',
-    range: 'Sep 2023 — Sep 2024',
+    yearFrom: '2023',
+    yearTo: '2024',
     html:
-      '<p>Fintech payroll &amp; treasury platform. Co-built a 0→1 fiat off-ramp, real-time multi-channel notifications, GraphQL-backed virtualised ledgers, and Sentry instrumentation across the stack.</p>',
+      '<p>Fintech payroll &amp; treasury platform. Co-built a 0→1 fiat off-ramp, real-time multi-channel notifications, GraphQL-backed virtualised ledgers, Sentry instrumentation.</p>',
   },
   {
     title: 'SDE II, Frontend',
     company: 'Jio Platforms',
-    range: 'Jan 2023 — Sep 2023',
+    yearFrom: '2023',
+    yearTo: '2023',
     html:
-      '<p>Led 6 engineers through a React→Next.js migration; scaled 300K→2M WAU, cut launch drop-off ~98%, and shipped PWA + Core Web Vitals improvements across a cloud-gaming platform.</p>',
+      '<p>Led 6 engineers through a React→Next.js migration; scaled 300K→2M WAU, cut launch drop-off ~98%, shipped PWA + Core Web Vitals wins on a cloud-gaming platform.</p>',
   },
   {
     title: 'SDE I',
     company: 'MyClassroom',
-    range: 'Feb 2021 — Jan 2023',
+    yearFrom: '2021',
+    yearTo: '2023',
     html:
-      '<p>First mobile engineer — built the React Native student app from zero, scaled to 20,000+ DAU across mobile and web, integrated Zoom SDK, MathJax/LaTeX, Mathpix OCR, and Razorpay/Paytm. Mentored a team of 3.</p>',
+      '<p>First mobile engineer — built the React Native student app from zero to 20,000+ DAU, integrated Zoom SDK, MathJax/LaTeX, Mathpix OCR, Razorpay/Paytm. Mentored 3.</p>',
   },
 ];
 
@@ -172,22 +176,21 @@ export const featured: FeaturedItem[] = [
       '<p>Sole frontend engineer on a high-traffic consumer fantasy-sports platform — owned architecture, roadmap and production lifecycle. Frictionless multi-method onboarding, a pre-submission validation layer that cut failed transactions, and a production-grade Next.js middleware security stack.</p>',
   },
   {
-    title: 'Fintech Fiat Off-Ramp',
-    year: '2023–24',
-    tech: ['0 → 1 product', 'GraphQL', 'Event-driven', 'Sentry'],
-    html:
-      '<p>Co-built a balance-to-bank off-ramp from scratch on a payroll &amp; treasury platform, growing into full-stack ownership across event-driven notifications (Email/Telegram/Slack), GraphQL-backed virtualised bookkeeping tables, and Sentry observability that cut mean-time-to-debug.</p>',
-  },
-  {
     title: 'Jio Cloud Gaming',
     year: '2023',
     tech: ['Led 6 engineers', '300K → 2M', 'Next.js SSR', 'PWA'],
     html:
       '<p>Led a team of 6 through a full React → Next.js migration with a modular monolithic SSR architecture. Grew the platform from ~300K to 2M weekly active users in under 9 months, cut launch drop-off ~98% via Sentry-driven crash resolution, and shipped PWA + Core Web Vitals wins.</p>',
   },
+  {
+    title: 'Fintech Fiat Off-Ramp',
+    year: '2023–24',
+    tech: ['0 → 1 product', 'GraphQL', 'Event-driven', 'Sentry'],
+    html:
+      '<p>Co-built a balance-to-bank off-ramp from scratch on a payroll &amp; treasury platform, growing into full-stack ownership across event-driven notifications (Email/Telegram/Slack), GraphQL-backed virtualised bookkeeping tables, and Sentry observability that cut mean-time-to-debug.</p>',
+  },
 ];
 
 export const contact: Contact = {
   title: "Let's build<br>something sharp.",
-  buttonText: 'email me',
 };

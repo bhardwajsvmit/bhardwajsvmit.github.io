@@ -19,6 +19,7 @@ const NAME_LINE_CLASS = 'block text-[clamp(64px,13.5vw,232px)]';
 
 const Hero = () => {
   const { eyebrow, nameLine1, nameLine2, buttonText, stats, html } = hero;
+  const eyebrowText = `{ ${eyebrow} }`;
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const blobRef = useRef<HTMLDivElement | null>(null);
@@ -165,14 +166,12 @@ const Hero = () => {
               eyebrowRef.current = el;
             }}
             className="relative z-3 flex items-center gap-[14px] font-mono text-[13px] font-medium tracking-[0.14em] text-accent uppercase">
-            <span className="inline-block h-[2px] w-[42px] bg-current" />
-            {eyebrow}
+            {eyebrowText}
             <div
               ref={eyebrowInkRef}
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 flex items-center gap-[14px] text-ink [clip-path:circle(0px_at_-999px_-999px)]">
-              <span className="inline-block h-[2px] w-[42px] bg-current" />
-              {eyebrow}
+              {eyebrowText}
             </div>
           </div>
 
@@ -205,7 +204,7 @@ const Hero = () => {
 
         <div
           ref={el => addReveal(2, el)}
-          className="relative z-2 mt-auto flex flex-wrap gap-x-[30px] gap-y-2.5 pt-10 font-mono text-xs tracking-[0.06em] text-[#6b685f] uppercase max-thone:gap-x-3.5 max-thone:pt-8 [&_.sep]:text-accent">
+          className="relative z-2 mt-auto flex flex-wrap items-center gap-x-[30px] gap-y-2.5 pt-10 font-mono text-xs tracking-[0.06em] text-[#6b685f] uppercase max-thone:gap-x-3.5 max-thone:pt-8 [&_.sep]:text-accent">
           {stats &&
             stats.map((stat, i) => (
               <React.Fragment key={i}>
@@ -213,6 +212,7 @@ const Hero = () => {
                 <span>{stat}</span>
               </React.Fragment>
             ))}
+          <span className="ml-auto text-ink max-thone:hidden">{'{ SCROLL ↓ }'}</span>
         </div>
       </section>
 

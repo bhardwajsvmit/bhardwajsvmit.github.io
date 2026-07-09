@@ -1,7 +1,8 @@
+import Loader from '@/components/Loader';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import Impact from '@/components/Impact';
 import Featured from '@/components/Featured';
+import Impact from '@/components/Impact';
 import Jobs from '@/components/Jobs';
 import About from '@/components/About';
 import Contact from '@/components/Contact';
@@ -9,10 +10,11 @@ import Contact from '@/components/Contact';
 export default function Home() {
   return (
     <>
+      <Loader />
       <Header />
       <Hero />
-      <Impact />
       <Featured />
+      <Impact />
       <Jobs />
       <About />
       <Contact />

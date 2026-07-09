@@ -21,11 +21,11 @@ const Featured = () => {
   return (
     <section id="work" className="bg-cream px-[34px] py-24 max-thone:px-5 max-thone:py-14">
       <div className="mx-auto max-w-[1500px]">
-        <div className="mb-3.5 font-mono text-[13px] tracking-[0.16em] text-accent uppercase">[ 02 ] Selected work</div>
+        <div className="mb-3.5 font-mono text-[13px] tracking-[0.16em] text-accent uppercase">{'{ 01 — SELECTED WORK }'}</div>
         <h2
           ref={revealTitle}
           className="m-0 mb-[50px] text-[clamp(34px,5vw,72px)] leading-[0.95] font-extrabold tracking-[-0.03em] text-ink">
-          Things I&rsquo;ve built &amp; owned.
+          Cool stuff I&rsquo;ve shipped.
         </h2>
         <div className="border-t-2 border-ink">
           {featured.map((item, i) => {
