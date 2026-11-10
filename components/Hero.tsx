@@ -23,7 +23,6 @@ const Hero = () => {
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const blobRef = useRef<HTMLDivElement | null>(null);
-  const cursorRef = useRef<HTMLDivElement | null>(null);
   const eyebrowRef = useRef<HTMLDivElement | null>(null);
   const eyebrowInkRef = useRef<HTMLDivElement | null>(null);
   const name1Ref = useRef<HTMLSpanElement | null>(null);
@@ -45,21 +44,11 @@ const Hero = () => {
       cy = -100,
       rx = -100,
       ry = -100;
-    let scale = 1,
-      targetScale = 1;
     let raf: number;
-    let shown = false;
 
     const onMove = (e: MouseEvent) => {
       cx = e.clientX;
       cy = e.clientY;
-      if (!shown && cursorRef.current) {
-        cursorRef.current.style.display = 'block';
-        shown = true;
-      }
-      const t = e.target as HTMLElement | null;
-      const hit = t?.closest?.('a, [data-work], [data-row], .skill');
-      targetScale = hit ? 2.1 : 1;
     };
     window.addEventListener('pointermove', onMove);
     window.addEventListener('mousemove', onMove);
@@ -67,10 +56,6 @@ const Hero = () => {
     const loop = () => {
       rx += (cx - rx) * 0.18;
       ry += (cy - ry) * 0.18;
-      scale += (targetScale - scale) * 0.14;
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate(${rx - 15}px,${ry - 15}px) scale(${scale.toFixed(3)})`;
-      }
       if (eyebrowRef.current && eyebrowInkRef.current && blobRef.current) {
         if (blobRef.current.style.opacity !== '0') {
           const er = eyebrowRef.current.getBoundingClientRect();
@@ -108,6 +93,7 @@ const Hero = () => {
   useEffect(() => {
     const el = marqueeRef.current;
     if (!el) return undefined;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
     const dir = -1;
     const speed = 60;
     const half = () => el.scrollWidth / 2;
@@ -147,10 +133,6 @@ const Hero = () => {
 
   return (
     <>
-      <div
-        ref={cursorRef}
-        className="pointer-events-none fixed top-0 left-0 z-[9999] hidden h-[30px] w-[30px] rounded-full border-2 border-accent [mix-blend-mode:difference] [transform:translate(-100px,-100px)] max-tablet:hidden!"
-      />
       <section
         ref={sectionRef}
         data-hero

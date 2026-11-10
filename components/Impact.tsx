@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { getSr } from '@/lib/sr';
 import { srConfig, stats, type Stat as StatData } from '@/data/content';
 
-const Stat = ({ value, prefix, suffix, label, delay }: StatData & { delay: number }) => {
+const Stat = ({ value, prefix, suffix, label, source, delay }: StatData & { delay: number }) => {
   const numRef = useRef<HTMLSpanElement | null>(null);
   const revealRef = useRef<HTMLDivElement | null>(null);
   const doneRef = useRef(false);
@@ -56,6 +57,13 @@ const Stat = ({ value, prefix, suffix, label, delay }: StatData & { delay: numbe
           </React.Fragment>
         ))}
       </div>
+      {source && (
+        <Link
+          href={`/work/${source.slug}`}
+          className="mt-4 inline-block bg-[linear-gradient(#FF4D23,#FF4D23)] bg-left-bottom bg-no-repeat bg-[length:0_2px] pb-0.5 font-mono text-[11.5px] font-bold tracking-[0.06em] text-cream uppercase no-underline [transition:color_0.2s_ease,background-size_0.28s_cubic-bezier(0.2,0.7,0.2,1)] hover:bg-[length:100%_2px] hover:text-accent">
+          {source.name} →
+        </Link>
+      )}
     </div>
   );
 };
