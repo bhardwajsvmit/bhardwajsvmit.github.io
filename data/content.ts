@@ -1,3 +1,5 @@
+import type { CaseStudySlug } from './work';
+
 export interface SocialLink {
   name: string;
   url: string;
@@ -14,7 +16,7 @@ export interface Stat {
   suffix?: string;
   label: string;
   /** Case study this number comes from. */
-  source?: { name: string; slug: string };
+  source?: CaseStudySlug;
 }
 
 export interface SrConfig {
@@ -65,13 +67,11 @@ export interface About {
 }
 
 export interface Job {
-  title: string;
-  company: string;
+  /** Case study for this role. The role title and company are read from it. */
+  slug: CaseStudySlug;
   yearFrom: string;
   yearTo: string;
   html: string;
-  /** Case study that tells this role's full story. */
-  slug: string;
 }
 
 export interface Contact {
@@ -100,21 +100,21 @@ export const stats: Stat[] = [
     value: 2,
     suffix: 'M',
     label: 'Weekly active users\nscaled from 300K',
-    source: { name: 'Jio Cloud Gaming', slug: 'jio-cloud-gaming' },
+    source: 'jio-cloud-gaming',
   },
   {
     value: 98,
     prefix: '~',
     suffix: '%',
     label: 'Drop-off cut\nat game launch',
-    source: { name: 'Jio Cloud Gaming', slug: 'jio-cloud-gaming' },
+    source: 'jio-cloud-gaming',
   },
   {
     value: 200,
     prefix: '$',
     suffix: 'K',
     label: 'Hackathon 1st prize\nglobal · UI/UX',
-    source: { name: 'RareBetSports', slug: 'rarebetsports' },
+    source: 'rarebetsports',
   },
   { value: 6, label: 'Engineers led\nacross 4 teams' },
 ];
@@ -183,8 +183,6 @@ export const about: About = {
 
 export const jobs: Job[] = [
   {
-    title: 'Senior Frontend Engineer',
-    company: 'RareBetSports',
     slug: 'rarebetsports',
     yearFrom: '2024',
     yearTo: 'NOW',
@@ -192,8 +190,6 @@ export const jobs: Job[] = [
       '<p>Sole frontend engineer shipping a fantasy-sports product end-to-end: onboarding, validation layer, nonce-based CSP middleware, virtualised leaderboards, and a $200K hackathon win.</p>',
   },
   {
-    title: 'Full Stack Developer',
-    company: 'Parcel Inc.',
     slug: 'parcel',
     yearFrom: '2023',
     yearTo: '2024',
@@ -201,8 +197,6 @@ export const jobs: Job[] = [
       '<p>Web3 payroll &amp; treasury platform. Worked on the core product and co-built a 0→1 fiat off-ramp: real-time multi-channel notifications, GraphQL-backed virtualised ledgers, Sentry instrumentation.</p>',
   },
   {
-    title: 'SDE II, Frontend',
-    company: 'Jio Platforms',
     slug: 'jio-cloud-gaming',
     yearFrom: '2023',
     yearTo: '2023',
@@ -210,8 +204,6 @@ export const jobs: Job[] = [
       '<p>Led 6 engineers through a React→Next.js migration; scaled 300K→2M WAU, cut launch drop-off ~98%, shipped PWA + Core Web Vitals wins on a cloud-gaming platform.</p>',
   },
   {
-    title: 'SDE I',
-    company: 'MyClassroom',
     slug: 'myclassroom',
     yearFrom: '2021',
     yearTo: '2023',

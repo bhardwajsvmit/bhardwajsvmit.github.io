@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { getSr } from '@/lib/sr';
-import { srConfig, hero } from '@/data/content';
+import { hero } from '@/data/content';
+import { prefersReducedMotion } from '@/lib/motion';
 
 const MARQUEE_ITEMS = [
   'React',
@@ -28,30 +28,16 @@ const Hero = () => {
   const name1Ref = useRef<HTMLSpanElement | null>(null);
   const name2Ref = useRef<HTMLSpanElement | null>(null);
   const marqueeRef = useRef<HTMLDivElement | null>(null);
-  const revealMap = useRef(new Map<number, HTMLElement>());
-  const addReveal = (key: number, el: HTMLElement | null) => {
-    if (el) revealMap.current.set(key, el);
-    else revealMap.current.delete(key);
-  };
 
+  // Blob and name parallax follow the pointer. The loop runs only while it is catching up.
   useEffect(() => {
-    const sr = getSr();
-    Array.from(revealMap.current.values()).forEach((el, i) => sr && sr.reveal(el, srConfig(i * 100)));
-  }, []);
-
-  useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
     let cx = -100,
       cy = -100,
       rx = -100,
       ry = -100;
-    let raf: number;
-
-    const onMove = (e: MouseEvent) => {
-      cx = e.clientX;
-      cy = e.clientY;
-    };
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('mousemove', onMove);
+    let raf = 0;
+    let running = false;
 
     const loop = () => {
       rx += (cx - rx) * 0.18;
@@ -79,21 +65,36 @@ const Hero = () => {
           name2Ref.current.style.transform = `translate(${(-px * 26).toFixed(1)}px,${(-py * 26 * 0.4).toFixed(1)}px)`;
         }
       }
+      if (Math.abs(cx - rx) + Math.abs(cy - ry) < 0.1) {
+        running = false;
+        return;
+      }
       raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
+    const start = () => {
+      if (running) return;
+      running = true;
+      raf = requestAnimationFrame(loop);
+    };
+    const onMove = (e: PointerEvent) => {
+      cx = e.clientX;
+      cy = e.clientY;
+      start();
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    // Scrolling moves the section under a still pointer.
+    window.addEventListener('scroll', start, { passive: true });
 
     return () => {
       window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('scroll', start);
       cancelAnimationFrame(raf);
     };
   }, []);
 
   useEffect(() => {
     const el = marqueeRef.current;
-    if (!el) return undefined;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    if (!el || prefersReducedMotion()) return undefined;
     const dir = -1;
     const speed = 60;
     const half = () => el.scrollWidth / 2;
@@ -143,11 +144,8 @@ const Hero = () => {
         />
         <div className="relative z-2 mx-auto w-full max-w-[1500px]">
           <div
-            ref={(el: HTMLDivElement | null) => {
-              addReveal(0, el);
-              eyebrowRef.current = el;
-            }}
-            className="relative z-3 flex items-center gap-[14px] font-mono text-[13px] font-medium tracking-[0.14em] text-accent-deep uppercase">
+            ref={eyebrowRef}
+            className="relative z-3 flex animate-rise items-center gap-[14px] font-mono text-[13px] font-medium tracking-[0.14em] text-accent-deep uppercase">
             {eyebrowText}
             <div
               ref={eyebrowInkRef}
@@ -168,7 +166,7 @@ const Hero = () => {
             </span>
           </h1>
 
-          <div ref={el => addReveal(1, el)} className="mt-[34px] flex flex-wrap items-end justify-between gap-[44px]">
+          <div className="mt-[34px] flex animate-rise flex-wrap items-end justify-between gap-[44px] [animation-delay:100ms]">
             <p
               className="m-0 max-w-[560px] text-[clamp(17px,1.7vw,21px)] font-medium leading-[1.45] text-[#1c1b18] [&_mark]:bg-accent [&_mark]:px-1.5 [&_mark]:text-inherit"
               dangerouslySetInnerHTML={{ __html: html }}
@@ -185,8 +183,7 @@ const Hero = () => {
         </div>
 
         <div
-          ref={el => addReveal(2, el)}
-          className="relative z-2 mt-auto flex flex-wrap items-center gap-x-[30px] gap-y-2.5 pt-10 font-mono text-xs tracking-[0.06em] text-[#6b685f] uppercase max-thone:gap-x-3.5 max-thone:pt-8 [&_.sep]:text-accent-deep">
+          className="relative z-2 mt-auto flex animate-rise flex-wrap [animation-delay:200ms] items-center gap-x-[30px] gap-y-2.5 pt-10 font-mono text-xs tracking-[0.06em] text-[#6b685f] uppercase max-thone:gap-x-3.5 max-thone:pt-8 [&_.sep]:text-accent-deep">
           {stats &&
             stats.map((stat, i) => (
               <React.Fragment key={i}>

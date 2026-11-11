@@ -12,17 +12,16 @@ export interface CaseStudy {
   metric: string;
   metricLabel: string;
   /** Short pills for the home page row. */
-  tags: string[];
+  tags: readonly string[];
   problem: string;
   approach: string;
   /** Strings are numbered items. A `{ heading }` entry starts a labelled group. */
-  built: Array<string | { heading: string }>;
+  built: readonly (string | { readonly heading: string })[];
   outcome: string;
-  tech: string[];
-  liveUrl?: string;
+  tech: readonly string[];
 }
 
-export const caseStudies: CaseStudy[] = [
+const studies = [
   {
     slug: 'rarebetsports',
     title: 'RareBetSports',
@@ -129,6 +128,15 @@ export const caseStudies: CaseStudy[] = [
       'The product grew from zero to more than 20,000 daily active users across mobile and web.',
     tech: ['React Native', 'React', 'Redux', 'Zoom SDK', 'MathJax', 'Mathpix', 'Razorpay', 'Paytm'],
   },
-];
+] as const satisfies readonly CaseStudy[];
 
+/** Every slug that has a page. Anything that links to a case study is typed with this, so a wrong slug fails the build. */
+export type CaseStudySlug = (typeof studies)[number]['slug'];
+
+export const caseStudies: readonly CaseStudy[] = studies;
+
+/** For the route, where the slug is whatever is in the URL. */
 export const getCaseStudy = (slug: string): CaseStudy | undefined => caseStudies.find(c => c.slug === slug);
+
+/** For links inside the site, where the slug is known to exist. */
+export const caseStudy = (slug: CaseStudySlug): CaseStudy => caseStudies.find(c => c.slug === slug)!;

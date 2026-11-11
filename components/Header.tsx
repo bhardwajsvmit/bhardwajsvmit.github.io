@@ -1,28 +1,38 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { navLinks } from '@/data/content';
 import { useClockRef } from '@/lib/useClock';
 
 const Header = () => {
   const clockRef = useClockRef<HTMLSpanElement>();
+  const headerRef = useRef<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);
 
+  // While the phone menu is open, Escape or a tap outside the header closes it.
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
+    const onPointerDown = (e: PointerEvent) => {
+      if (!headerRef.current?.contains(e.target as Node)) setOpen(false);
+    };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointerDown);
+    };
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-[60] border-b-2 border-ink bg-cream">
+    <header ref={headerRef} className="sticky top-0 z-[60] border-b-2 border-ink bg-cream">
       <div className="flex items-center gap-[18px] px-[34px] py-4 max-phablet:gap-3 max-phablet:px-5 max-phablet:py-3.5">
         <Link
           href="/"
+          onClick={() => setOpen(false)}
           aria-label="Sumit Bhardwaj, home"
           className="font-mono text-[15px] font-bold tracking-[0.02em] text-inherit no-underline [&_span]:text-accent-deep">
           SUMIT.B<span>✦</span>
@@ -65,22 +75,20 @@ const Header = () => {
           />
         </button>
       </div>
-      {open && (
-        <nav id="mobile-nav" aria-label="Sections" className="hidden border-t-2 border-ink max-thone:block">
-          {navLinks.map(({ name, url }, i) => (
-            <Link
-              key={i}
-              href={url}
-              onClick={() => setOpen(false)}
-              className="flex items-baseline gap-3 border-b-2 border-ink px-5 py-4 text-[22px] font-extrabold tracking-[-0.02em] text-ink no-underline last:border-b-0 active:bg-ink active:text-cream">
-              <span className="font-mono text-[13px] font-bold tracking-normal text-accent-deep">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              {name}
-            </Link>
-          ))}
-        </nav>
-      )}
+      <nav id="mobile-nav" aria-label="Sections" hidden={!open} className="hidden border-t-2 border-ink max-thone:block">
+        {navLinks.map(({ name, url }, i) => (
+          <Link
+            key={i}
+            href={url}
+            onClick={() => setOpen(false)}
+            className="flex items-baseline gap-3 border-b-2 border-ink px-5 py-4 text-[22px] font-extrabold tracking-[-0.02em] text-ink no-underline last:border-b-0 active:bg-ink active:text-cream">
+            <span className="font-mono text-[13px] font-bold tracking-normal text-accent-deep">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            {name}
+          </Link>
+        ))}
+      </nav>
     </header>
   );
 };

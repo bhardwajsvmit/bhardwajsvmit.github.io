@@ -31,9 +31,13 @@ const labelBase = 'font-mono text-[13px] tracking-[0.16em] uppercase';
 const label = `${labelBase} text-accent-deep`;
 const prose = 'm-0 max-w-[820px] text-[clamp(18px,1.7vw,22px)] font-medium leading-[1.55]';
 
-const Block = ({ index, name, children }: { index: number; name: string; children: ReactNode }) => (
+const SECTIONS = ['Problem', 'Approach', 'What I built', 'Outcome'] as const;
+type Section = (typeof SECTIONS)[number];
+const sectionLabel = (name: Section) => `{ ${String(SECTIONS.indexOf(name) + 1).padStart(2, '0')} — ${name} }`;
+
+const Block = ({ name, children }: { name: Section; children: ReactNode }) => (
   <div className="grid grid-cols-[260px_1fr] gap-10 border-t-2 border-ink py-12 max-tablet:grid-cols-1 max-tablet:gap-5 max-thone:py-9">
-    <h2 className={`m-0 font-medium ${label}`}>{`{ ${String(index).padStart(2, '0')} — ${name} }`}</h2>
+    <h2 className={`m-0 font-medium ${label}`}>{sectionLabel(name)}</h2>
     <div className="min-w-0">{children}</div>
   </div>
 );
@@ -71,7 +75,7 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
             <div className={`mt-12 animate-rise max-thone:mt-9 ${label}`}>
               {`{ CASE STUDY ${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')} }`}
             </div>
-            <h1 className="m-0 mt-[18px] animate-rise text-[clamp(46px,9.5vw,160px)] leading-[0.86] font-extrabold tracking-[-0.045em] text-ink uppercase [animation-delay:60ms]">
+            <h1 className="m-0 mt-[18px] animate-rise text-[clamp(34px,9.5vw,160px)] leading-[0.86] [overflow-wrap:anywhere] font-extrabold tracking-[-0.045em] text-ink uppercase [animation-delay:60ms]">
               {study.title}
             </h1>
             <p className="m-0 mt-8 max-w-[900px] animate-rise text-[clamp(19px,2.1vw,28px)] font-medium leading-[1.35] text-[#1c1b18] [animation-delay:120ms]">
@@ -103,13 +107,13 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
 
         <section className="px-[34px] pt-16 pb-8 max-thone:px-5 max-thone:pt-10 max-thone:pb-4">
           <div className="mx-auto max-w-[1500px]">
-            <Block index={1} name="Problem">
+            <Block name="Problem">
               <p className={`${prose} text-[#1c1b18]`}>{study.problem}</p>
             </Block>
-            <Block index={2} name="Approach">
+            <Block name="Approach">
               <p className={`${prose} text-[#1c1b18]`}>{study.approach}</p>
             </Block>
-            <Block index={3} name="What I built">
+            <Block name="What I built">
               <ol className="m-0 list-none border-t-2 border-ink p-0">
                 {built.map((item, i) =>
                   item.heading ? (
@@ -134,7 +138,7 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
 
         <section className="bg-ink px-[34px] py-24 text-cream max-thone:px-5 max-thone:py-14">
           <div className="mx-auto max-w-[1500px]">
-            <h2 className={`m-0 font-medium text-accent ${labelBase}`}>{'{ 04 — OUTCOME }'}</h2>
+            <h2 className={`m-0 font-medium text-accent ${labelBase}`}>{sectionLabel('Outcome')}</h2>
             <p className="m-0 mt-5 max-w-[1200px] text-[clamp(26px,3.6vw,54px)] leading-[1.08] font-extrabold tracking-[-0.03em]">
               {study.outcome}
             </p>
@@ -147,15 +151,6 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
                   </li>
                 ))}
               </ul>
-              {study.liveUrl && (
-                <a
-                  href={study.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-8 inline-block font-mono text-[13px] font-bold tracking-[0.08em] text-accent uppercase no-underline hover:underline">
-                  View live project ↗
-                </a>
-              )}
             </div>
           </div>
         </section>

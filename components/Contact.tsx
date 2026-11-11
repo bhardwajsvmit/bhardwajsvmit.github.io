@@ -2,6 +2,7 @@
 
 import { email, phone, phoneDisplay, socialMedia, contact } from '@/data/content';
 import { useClockRef } from '@/lib/useClock';
+import { prefersReducedMotion } from '@/lib/motion';
 
 const flinkClass =
   'bg-[linear-gradient(#111110,#111110)] bg-left-bottom bg-no-repeat bg-[length:0_2px] pb-0.5 text-inherit no-underline [transition:background-size_0.28s_cubic-bezier(0.2,0.7,0.2,1),letter-spacing_0.28s_ease] hover:bg-[length:100%_2px] hover:tracking-[0.09em]';
@@ -53,7 +54,7 @@ const Contact = ({ label = '{ 05 — LET’S TALK }' }: { label?: string }) => {
             href="#"
             onClick={e => {
               e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
             }}
             className={flinkClass}>
             {'{ Back to top }'}

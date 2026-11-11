@@ -6,6 +6,9 @@ import { getSr } from '@/lib/sr';
 import { srConfig } from '@/data/content';
 import { caseStudies } from '@/data/work';
 
+const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+const countWord = COUNT_WORDS[caseStudies.length] ?? String(caseStudies.length);
+
 const Featured = () => {
   const revealTitle = useRef<HTMLHeadingElement | null>(null);
   const revealMap = useRef(new Map<number, HTMLElement>());
@@ -30,7 +33,8 @@ const Featured = () => {
           Cool stuff I&rsquo;ve shipped.
         </h2>
         <p className="m-0 mt-5 mb-[50px] max-w-[620px] text-[17px] font-medium leading-[1.55] text-[#1c1b18]">
-          Four products, each told from the problem to the result. Open one for the full case study.
+          {countWord} {caseStudies.length === 1 ? 'product' : 'products'}, each told from the problem to the result. Open one
+          for the full case study.
         </p>
         <div className="border-t-2 border-ink">
           {caseStudies.map((item, i) => {
@@ -39,8 +43,6 @@ const Featured = () => {
               <article key={slug} ref={el => addReveal(i, el)} className="border-b-2 border-ink">
                 <Link
                   href={`/work/${slug}`}
-                  data-work
-                  aria-label={`${title} case study`}
                   className="group relative grid grid-cols-[auto_1fr_auto] items-start gap-[30px] px-2 py-9 text-ink no-underline max-thone:grid-cols-[auto_1fr] max-thone:gap-x-4 max-thone:gap-y-3 max-thone:py-7 [transition:background_0.3s_cubic-bezier(0.2,0.7,0.2,1),color_0.3s_cubic-bezier(0.2,0.7,0.2,1),padding_0.3s_cubic-bezier(0.2,0.7,0.2,1)] hover:bg-ink hover:px-6 hover:text-cream focus-visible:bg-ink focus-visible:px-6 focus-visible:text-cream focus-visible:outline-none">
                   <div className="font-mono text-[15px] font-bold text-accent-deep group-hover:text-accent group-focus-visible:text-accent">
                     {String(i + 1).padStart(2, '0')}

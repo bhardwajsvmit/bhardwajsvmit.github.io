@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { getSr } from '@/lib/sr';
 import { srConfig, jobs } from '@/data/content';
+import { caseStudy } from '@/data/work';
 
 const Jobs = () => {
   const revealTitle = useRef<HTMLHeadingElement | null>(null);
@@ -42,16 +43,15 @@ const Jobs = () => {
 
         <div className="border-t-2 border-rule">
           {jobs.map((item, i) => {
-            const { title, company, yearFrom, yearTo, html, slug } = item;
+            const { yearFrom, yearTo, html, slug } = item;
+            const { role, company } = caseStudy(slug);
             return (
               <div key={i} ref={el => addReveal(i, el)} className="border-b-2 border-rule">
                 <Link
                   href={`/work/${slug}`}
-                  data-row
-                  aria-label={`${title} at ${company}, case study`}
                   className="group grid grid-cols-[1.4fr_1fr_220px] items-baseline gap-6 px-2.5 py-[26px] text-cream no-underline [transition:background_0.26s_cubic-bezier(0.2,0.7,0.2,1),color_0.26s_cubic-bezier(0.2,0.7,0.2,1),padding-left_0.26s_cubic-bezier(0.2,0.7,0.2,1)] max-thone:grid-cols-1 max-thone:gap-3 hover:bg-accent hover:pl-[22px] hover:text-ink focus-visible:bg-accent focus-visible:pl-[22px] focus-visible:text-ink focus-visible:outline-none">
                   <div>
-                    <div className="text-[clamp(20px,2.2vw,28px)] font-bold tracking-[-0.01em]">{title}</div>
+                    <div className="text-[clamp(20px,2.2vw,28px)] font-bold tracking-[-0.01em]">{role}</div>
                     <div
                       className="mt-2 max-w-[820px] text-[14.5px] font-medium leading-[1.55] opacity-[0.82] [&_p]:m-0"
                       dangerouslySetInnerHTML={{ __html: html }}
