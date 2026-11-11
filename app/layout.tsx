@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import './globals.css';
+import CursorRing from '@/components/CursorRing';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://bhardwajsvmit.github.io'),
   title: 'Sumit Bhardwaj | Senior Frontend Engineer',
   description:
     'Sumit Bhardwaj is a Senior Frontend Engineer who takes products from 0→1 and scales them to millions of users — performance, SSR/SEO, design systems, and security.',
@@ -10,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -19,7 +21,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <CursorRing />
+      </body>
     </html>
   );
 }

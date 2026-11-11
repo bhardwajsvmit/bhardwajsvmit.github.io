@@ -1,3 +1,5 @@
+import type { CaseStudySlug } from './work';
+
 export interface SocialLink {
   name: string;
   url: string;
@@ -13,6 +15,8 @@ export interface Stat {
   prefix?: string;
   suffix?: string;
   label: string;
+  /** Case study this number comes from. */
+  source?: CaseStudySlug;
 }
 
 export interface SrConfig {
@@ -45,23 +49,28 @@ export interface SkillGroup {
   items: string[];
 }
 
+export interface Principle {
+  title: string;
+  text: string;
+}
+
+export interface QuickFact {
+  label: string;
+  value: string;
+}
+
 export interface About {
   skillGroups: SkillGroup[];
+  quickFacts: QuickFact[];
+  principles: Principle[];
   html: string;
 }
 
 export interface Job {
-  title: string;
-  company: string;
+  /** Case study for this role. The role title and company are read from it. */
+  slug: CaseStudySlug;
   yearFrom: string;
   yearTo: string;
-  html: string;
-}
-
-export interface FeaturedItem {
-  title: string;
-  year: string;
-  tech: string[];
   html: string;
 }
 
@@ -76,19 +85,37 @@ export const phoneDisplay = '+91 96549 01601';
 export const socialMedia: SocialLink[] = [
   { name: 'GitHub', url: 'https://github.com/bhardwajsvmit' },
   { name: 'Linkedin', url: 'https://www.linkedin.com/in/bhardwajsvmit/' },
+  { name: 'Telegram', url: 'https://t.me/bhardwajsumit' },
 ];
 
 export const navLinks: NavLink[] = [
-  { name: 'Work', url: '#work' },
-  { name: 'Impact', url: '#impact' },
-  { name: 'Experience', url: '#timeline' },
-  { name: 'About', url: '#about' },
+  { name: 'Work', url: '/#work' },
+  { name: 'Impact', url: '/#impact' },
+  { name: 'Experience', url: '/#timeline' },
+  { name: 'About', url: '/#about' },
 ];
 
 export const stats: Stat[] = [
-  { value: 2, suffix: 'M', label: 'Weekly active users\nscaled from 300K' },
-  { value: 98, prefix: '~', suffix: '%', label: 'Drop-off cut\nat game launch' },
-  { value: 200, prefix: '$', suffix: 'K', label: 'Hackathon 1st prize\nglobal · UI/UX' },
+  {
+    value: 2,
+    suffix: 'M',
+    label: 'Weekly active users\nscaled from 300K',
+    source: 'jio-cloud-gaming',
+  },
+  {
+    value: 98,
+    prefix: '~',
+    suffix: '%',
+    label: 'Drop-off cut\nat game launch',
+    source: 'jio-cloud-gaming',
+  },
+  {
+    value: 200,
+    prefix: '$',
+    suffix: 'K',
+    label: 'Hackathon 1st prize\nglobal · UI/UX',
+    source: 'rarebetsports',
+  },
   { value: 6, label: 'Engineers led\nacross 4 teams' },
 ];
 
@@ -128,66 +155,60 @@ export const about: About = {
       items: ['CSP', 'Hardened headers', 'Sentry', 'React Native', 'Node.js'],
     },
   ],
+  quickFacts: [
+    { label: 'Experience', value: '5+ years' },
+    { label: 'Focus', value: 'Frontend · Performance' },
+    { label: 'Core stack', value: 'React · Next.js · TypeScript' },
+    { label: 'Based in', value: 'New Delhi, IN' },
+    { label: 'Open to', value: 'Senior frontend roles' },
+    { label: 'Approach', value: '0 → 1, then scale' },
+  ],
+  principles: [
+    {
+      title: 'Own it end to end',
+      text: 'Architecture, roadmap, build and production. At RareBetSports I am the only frontend engineer, so nothing is handed off half-done.',
+    },
+    {
+      title: 'Performance is a feature',
+      text: 'SSR, virtualisation, Core Web Vitals and crash data decide what ships next. That is the work behind Jio Cloud Gaming going from 300K to 2M weekly users.',
+    },
+    {
+      title: 'Lead by shipping',
+      text: 'I led six engineers through a React → Next.js migration and mentored a team of three at MyClassroom. Teams move fastest with a clear architecture and small, safe steps.',
+    },
+  ],
   html:
     "<p>I've shipped full products end-to-end as the only frontend engineer, and guided teams of up to six through migrations and re-architectures. What stays constant: an obsession with performance, accessibility, and interfaces that feel effortless under real load.</p>\n<p>Based in New Delhi — open to senior frontend roles at high-growth product companies where performance, scale, and UX are core.</p>",
 };
 
 export const jobs: Job[] = [
   {
-    title: 'Senior Frontend Engineer',
-    company: 'RareBetSports',
+    slug: 'rarebetsports',
     yearFrom: '2024',
     yearTo: 'NOW',
     html:
       '<p>Sole frontend engineer shipping a fantasy-sports product end-to-end: onboarding, validation layer, nonce-based CSP middleware, virtualised leaderboards, and a $200K hackathon win.</p>',
   },
   {
-    title: 'Full Stack Developer',
-    company: 'Parcel Inc.',
+    slug: 'parcel',
     yearFrom: '2023',
     yearTo: '2024',
     html:
-      '<p>Fintech payroll &amp; treasury platform. Co-built a 0→1 fiat off-ramp, real-time multi-channel notifications, GraphQL-backed virtualised ledgers, Sentry instrumentation.</p>',
+      '<p>Web3 payroll &amp; treasury platform. Worked on the core product and co-built a 0→1 fiat off-ramp: real-time multi-channel notifications, GraphQL-backed virtualised ledgers, Sentry instrumentation.</p>',
   },
   {
-    title: 'SDE II, Frontend',
-    company: 'Jio Platforms',
+    slug: 'jio-cloud-gaming',
     yearFrom: '2023',
     yearTo: '2023',
     html:
       '<p>Led 6 engineers through a React→Next.js migration; scaled 300K→2M WAU, cut launch drop-off ~98%, shipped PWA + Core Web Vitals wins on a cloud-gaming platform.</p>',
   },
   {
-    title: 'SDE I',
-    company: 'MyClassroom',
+    slug: 'myclassroom',
     yearFrom: '2021',
     yearTo: '2023',
     html:
       '<p>First mobile engineer — built the React Native student app from zero to 20,000+ DAU, integrated Zoom SDK, MathJax/LaTeX, Mathpix OCR, Razorpay/Paytm. Mentored 3.</p>',
-  },
-];
-
-export const featured: FeaturedItem[] = [
-  {
-    title: 'RareBetSports',
-    year: '2024 →',
-    tech: ['Solo architect', 'CSP middleware', 'React Virtuoso', 'Canvas API'],
-    html:
-      '<p>Sole frontend engineer on a high-traffic consumer fantasy-sports platform — owned architecture, roadmap and production lifecycle. Frictionless multi-method onboarding, a pre-submission validation layer that cut failed transactions, and a production-grade Next.js middleware security stack.</p>',
-  },
-  {
-    title: 'Jio Cloud Gaming',
-    year: '2023',
-    tech: ['Led 6 engineers', '300K → 2M', 'Next.js SSR', 'PWA'],
-    html:
-      '<p>Led a team of 6 through a full React → Next.js migration with a modular monolithic SSR architecture. Grew the platform from ~300K to 2M weekly active users in under 9 months, cut launch drop-off ~98% via Sentry-driven crash resolution, and shipped PWA + Core Web Vitals wins.</p>',
-  },
-  {
-    title: 'Fintech Fiat Off-Ramp',
-    year: '2023–24',
-    tech: ['0 → 1 product', 'GraphQL', 'Event-driven', 'Sentry'],
-    html:
-      '<p>Co-built a balance-to-bank off-ramp from scratch on a payroll &amp; treasury platform, growing into full-stack ownership across event-driven notifications (Email/Telegram/Slack), GraphQL-backed virtualised bookkeeping tables, and Sentry observability that cut mean-time-to-debug.</p>',
   },
 ];
 

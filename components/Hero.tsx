@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { getSr } from '@/lib/sr';
-import { srConfig, hero } from '@/data/content';
+import { hero } from '@/data/content';
+import { prefersReducedMotion } from '@/lib/motion';
 
 const MARQUEE_ITEMS = [
   'React',
@@ -23,54 +23,25 @@ const Hero = () => {
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const blobRef = useRef<HTMLDivElement | null>(null);
-  const cursorRef = useRef<HTMLDivElement | null>(null);
   const eyebrowRef = useRef<HTMLDivElement | null>(null);
   const eyebrowInkRef = useRef<HTMLDivElement | null>(null);
   const name1Ref = useRef<HTMLSpanElement | null>(null);
   const name2Ref = useRef<HTMLSpanElement | null>(null);
   const marqueeRef = useRef<HTMLDivElement | null>(null);
-  const revealMap = useRef(new Map<number, HTMLElement>());
-  const addReveal = (key: number, el: HTMLElement | null) => {
-    if (el) revealMap.current.set(key, el);
-    else revealMap.current.delete(key);
-  };
 
+  // Blob and name parallax follow the pointer. The loop runs only while it is catching up.
   useEffect(() => {
-    const sr = getSr();
-    Array.from(revealMap.current.values()).forEach((el, i) => sr && sr.reveal(el, srConfig(i * 100)));
-  }, []);
-
-  useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
     let cx = -100,
       cy = -100,
       rx = -100,
       ry = -100;
-    let scale = 1,
-      targetScale = 1;
-    let raf: number;
-    let shown = false;
-
-    const onMove = (e: MouseEvent) => {
-      cx = e.clientX;
-      cy = e.clientY;
-      if (!shown && cursorRef.current) {
-        cursorRef.current.style.display = 'block';
-        shown = true;
-      }
-      const t = e.target as HTMLElement | null;
-      const hit = t?.closest?.('a, [data-work], [data-row], .skill');
-      targetScale = hit ? 2.1 : 1;
-    };
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('mousemove', onMove);
+    let raf = 0;
+    let running = false;
 
     const loop = () => {
       rx += (cx - rx) * 0.18;
       ry += (cy - ry) * 0.18;
-      scale += (targetScale - scale) * 0.14;
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate(${rx - 15}px,${ry - 15}px) scale(${scale.toFixed(3)})`;
-      }
       if (eyebrowRef.current && eyebrowInkRef.current && blobRef.current) {
         if (blobRef.current.style.opacity !== '0') {
           const er = eyebrowRef.current.getBoundingClientRect();
@@ -94,20 +65,36 @@ const Hero = () => {
           name2Ref.current.style.transform = `translate(${(-px * 26).toFixed(1)}px,${(-py * 26 * 0.4).toFixed(1)}px)`;
         }
       }
+      if (Math.abs(cx - rx) + Math.abs(cy - ry) < 0.1) {
+        running = false;
+        return;
+      }
       raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
+    const start = () => {
+      if (running) return;
+      running = true;
+      raf = requestAnimationFrame(loop);
+    };
+    const onMove = (e: PointerEvent) => {
+      cx = e.clientX;
+      cy = e.clientY;
+      start();
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    // Scrolling moves the section under a still pointer.
+    window.addEventListener('scroll', start, { passive: true });
 
     return () => {
       window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('scroll', start);
       cancelAnimationFrame(raf);
     };
   }, []);
 
   useEffect(() => {
     const el = marqueeRef.current;
-    if (!el) return undefined;
+    if (!el || prefersReducedMotion()) return undefined;
     const dir = -1;
     const speed = 60;
     const half = () => el.scrollWidth / 2;
@@ -147,10 +134,6 @@ const Hero = () => {
 
   return (
     <>
-      <div
-        ref={cursorRef}
-        className="pointer-events-none fixed top-0 left-0 z-[9999] hidden h-[30px] w-[30px] rounded-full border-2 border-accent [mix-blend-mode:difference] [transform:translate(-100px,-100px)] max-tablet:hidden!"
-      />
       <section
         ref={sectionRef}
         data-hero
@@ -161,11 +144,8 @@ const Hero = () => {
         />
         <div className="relative z-2 mx-auto w-full max-w-[1500px]">
           <div
-            ref={(el: HTMLDivElement | null) => {
-              addReveal(0, el);
-              eyebrowRef.current = el;
-            }}
-            className="relative z-3 flex items-center gap-[14px] font-mono text-[13px] font-medium tracking-[0.14em] text-accent uppercase">
+            ref={eyebrowRef}
+            className="relative z-3 flex animate-rise items-center gap-[14px] font-mono text-[13px] font-medium tracking-[0.14em] text-accent-deep uppercase">
             {eyebrowText}
             <div
               ref={eyebrowInkRef}
@@ -186,7 +166,7 @@ const Hero = () => {
             </span>
           </h1>
 
-          <div ref={el => addReveal(1, el)} className="mt-[34px] flex flex-wrap items-end justify-between gap-[44px]">
+          <div className="mt-[34px] flex animate-rise flex-wrap items-end justify-between gap-[44px] [animation-delay:100ms]">
             <p
               className="m-0 max-w-[560px] text-[clamp(17px,1.7vw,21px)] font-medium leading-[1.45] text-[#1c1b18] [&_mark]:bg-accent [&_mark]:px-1.5 [&_mark]:text-inherit"
               dangerouslySetInnerHTML={{ __html: html }}
@@ -203,8 +183,7 @@ const Hero = () => {
         </div>
 
         <div
-          ref={el => addReveal(2, el)}
-          className="relative z-2 mt-auto flex flex-wrap items-center gap-x-[30px] gap-y-2.5 pt-10 font-mono text-xs tracking-[0.06em] text-[#6b685f] uppercase max-thone:gap-x-3.5 max-thone:pt-8 [&_.sep]:text-accent">
+          className="relative z-2 mt-auto flex animate-rise flex-wrap [animation-delay:200ms] items-center gap-x-[30px] gap-y-2.5 pt-10 font-mono text-xs tracking-[0.06em] text-[#6b685f] uppercase max-thone:gap-x-3.5 max-thone:pt-8 [&_.sep]:text-accent-deep">
           {stats &&
             stats.map((stat, i) => (
               <React.Fragment key={i}>

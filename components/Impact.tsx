@@ -1,44 +1,56 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { getSr } from '@/lib/sr';
 import { srConfig, stats, type Stat as StatData } from '@/data/content';
+import { caseStudy } from '@/data/work';
+import { prefersReducedMotion } from '@/lib/motion';
 
-const Stat = ({ value, prefix, suffix, label, delay }: StatData & { delay: number }) => {
+const Stat = ({ value, prefix, suffix, label, source, delay }: StatData & { delay: number }) => {
   const numRef = useRef<HTMLSpanElement | null>(null);
   const revealRef = useRef<HTMLDivElement | null>(null);
-  const doneRef = useRef(false);
+  const final = `${value}${suffix ?? ''}`;
+  const study = source ? caseStudy(source) : null;
 
   useEffect(() => {
     const sr = getSr();
     sr && sr.reveal(revealRef.current!, srConfig(delay));
   }, [delay]);
 
+  // The markup carries the real number. With JS and motion allowed, it counts up from 0 when it scrolls into view.
   useEffect(() => {
     const el = numRef.current;
-    if (!el) return undefined;
+    if (!el || prefersReducedMotion()) return undefined;
+    let raf = 0;
+    el.textContent = '0';
     const observer = new IntersectionObserver(
       entries => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting || doneRef.current) return;
-          doneRef.current = true;
-          const dur = 1700;
-          const start = performance.now();
-          const tick = (now: number) => {
-            const p = Math.min((now - start) / dur, 1);
-            const eased = 1 - Math.pow(1 - p, 3);
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        observer.disconnect();
+        const dur = 1700;
+        const start = performance.now();
+        const tick = (now: number) => {
+          const p = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          if (p < 1) {
             el.textContent = Math.round(value * eased) + (p > 0.05 ? suffix || '' : '');
-            if (p < 1) requestAnimationFrame(tick);
-            else el.textContent = value + (suffix || '');
-          };
-          requestAnimationFrame(tick);
-        });
+            raf = requestAnimationFrame(tick);
+          } else {
+            el.textContent = final;
+          }
+        };
+        raf = requestAnimationFrame(tick);
       },
       { threshold: 0.4 },
     );
     observer.observe(el);
-    return () => observer.disconnect();
-  }, [value, suffix]);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(raf);
+      el.textContent = final;
+    };
+  }, [value, suffix, final]);
 
   return (
     <div
@@ -46,7 +58,7 @@ const Stat = ({ value, prefix, suffix, label, delay }: StatData & { delay: numbe
       className="min-w-0 border-r-2 border-b-2 border-cream border-rule px-[26px] pt-[34px] pb-[30px] max-thone:px-3.5 max-thone:pt-6 max-thone:pb-5 [&:nth-child(4n)]:border-r-0 max-tablet:[&:nth-child(2n)]:border-r-0">
       <div className="text-[clamp(48px,6vw,90px)] max-thone:text-[clamp(28px,9.5vw,44px)] leading-none font-extrabold tracking-[-0.04em] text-accent">
         {prefix}
-        <span ref={numRef}>0</span>
+        <span ref={numRef}>{final}</span>
       </div>
       <div className="mt-3.5 font-mono text-[12.5px] leading-[1.6] tracking-[0.04em] text-[#a7a499] uppercase">
         {label.split('\n').map((line, i) => (
@@ -56,6 +68,13 @@ const Stat = ({ value, prefix, suffix, label, delay }: StatData & { delay: numbe
           </React.Fragment>
         ))}
       </div>
+      {study && (
+        <Link
+          href={`/work/${study.slug}`}
+          className="mt-4 inline-block bg-[linear-gradient(#FF4D23,#FF4D23)] bg-left-bottom bg-no-repeat bg-[length:0_2px] pb-0.5 font-mono text-[11.5px] font-bold tracking-[0.06em] text-cream uppercase no-underline [transition:color_0.2s_ease,background-size_0.28s_cubic-bezier(0.2,0.7,0.2,1)] hover:bg-[length:100%_2px] hover:text-accent">
+          {study.title} →
+        </Link>
+      )}
     </div>
   );
 };
