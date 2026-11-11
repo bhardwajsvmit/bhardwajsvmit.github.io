@@ -1,4 +1,3 @@
-import Loader from '@/components/Loader';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Featured from '@/components/Featured';
@@ -10,7 +9,6 @@ import Contact from '@/components/Contact';
 export default function Home() {
   return (
     <>
-      <Loader />
       <Header />
       <Hero />
       <Featured />

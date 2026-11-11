@@ -4,15 +4,10 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { navLinks } from '@/data/content';
 import { useClockRef } from '@/lib/useClock';
-import { session } from '@/lib/session';
 
 const Header = () => {
   const clockRef = useClockRef<HTMLSpanElement>();
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    session.entered = true;
-  }, []);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -29,7 +24,7 @@ const Header = () => {
         <Link
           href="/"
           aria-label="Sumit Bhardwaj, home"
-          className="font-mono text-[15px] font-bold tracking-[0.02em] text-inherit no-underline [&_span]:text-accent">
+          className="font-mono text-[15px] font-bold tracking-[0.02em] text-inherit no-underline [&_span]:text-accent-deep">
           SUMIT.B<span>✦</span>
         </Link>
         <nav
@@ -39,8 +34,8 @@ const Header = () => {
             <Link
               key={i}
               href={url}
-              className="bg-[linear-gradient(#FF4D23,#FF4D23)] bg-left-bottom bg-no-repeat bg-[length:0_2px] pb-[3px] text-inherit no-underline [transition:color_0.2s_ease,background-size_0.28s_cubic-bezier(0.2,0.7,0.2,1)] hover:bg-[length:100%_2px] hover:text-accent">
-              <span className="mr-[5px] text-accent">{String(i + 1).padStart(2, '0')}</span>
+              className="bg-[linear-gradient(#FF4D23,#FF4D23)] bg-left-bottom bg-no-repeat bg-[length:0_2px] pb-[3px] text-inherit no-underline [transition:color_0.2s_ease,background-size_0.28s_cubic-bezier(0.2,0.7,0.2,1)] hover:bg-[length:100%_2px] hover:text-accent-deep">
+              <span className="mr-[5px] text-accent-deep">{String(i + 1).padStart(2, '0')}</span>
               {name}
             </Link>
           ))}
@@ -78,7 +73,7 @@ const Header = () => {
               href={url}
               onClick={() => setOpen(false)}
               className="flex items-baseline gap-3 border-b-2 border-ink px-5 py-4 text-[22px] font-extrabold tracking-[-0.02em] text-ink no-underline last:border-b-0 active:bg-ink active:text-cream">
-              <span className="font-mono text-[13px] font-bold tracking-normal text-accent">
+              <span className="font-mono text-[13px] font-bold tracking-normal text-accent-deep">
                 {String(i + 1).padStart(2, '0')}
               </span>
               {name}

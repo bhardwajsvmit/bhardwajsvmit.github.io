@@ -23,7 +23,7 @@ const Featured = () => {
   return (
     <section id="work" className="bg-cream px-[34px] py-24 max-thone:px-5 max-thone:py-14">
       <div className="mx-auto max-w-[1500px]">
-        <div className="mb-3.5 font-mono text-[13px] tracking-[0.16em] text-accent uppercase">{'{ 01 — SELECTED WORK }'}</div>
+        <div className="mb-3.5 font-mono text-[13px] tracking-[0.16em] text-accent-deep uppercase">{'{ 01 — SELECTED WORK }'}</div>
         <h2
           ref={revealTitle}
           className="m-0 text-[clamp(34px,5vw,72px)] leading-[0.95] font-extrabold tracking-[-0.03em] text-ink">
@@ -42,14 +42,16 @@ const Featured = () => {
                   data-work
                   aria-label={`${title} case study`}
                   className="group relative grid grid-cols-[auto_1fr_auto] items-start gap-[30px] px-2 py-9 text-ink no-underline max-thone:grid-cols-[auto_1fr] max-thone:gap-x-4 max-thone:gap-y-3 max-thone:py-7 [transition:background_0.3s_cubic-bezier(0.2,0.7,0.2,1),color_0.3s_cubic-bezier(0.2,0.7,0.2,1),padding_0.3s_cubic-bezier(0.2,0.7,0.2,1)] hover:bg-ink hover:px-6 hover:text-cream focus-visible:bg-ink focus-visible:px-6 focus-visible:text-cream focus-visible:outline-none">
-                  <div className="font-mono text-[15px] font-bold text-accent">{String(i + 1).padStart(2, '0')}</div>
+                  <div className="font-mono text-[15px] font-bold text-accent-deep group-hover:text-accent group-focus-visible:text-accent">
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
                   <div className="min-w-0 max-thone:col-span-2">
                     <h3 className="m-0 text-[clamp(30px,4.2vw,60px)] leading-[0.95] font-extrabold tracking-[-0.03em] text-inherit [transition:transform_0.34s_cubic-bezier(0.2,0.7,0.2,1)] group-hover:[transform:translateX(12px)]">
                       {title}
                     </h3>
                     <p className="m-0 mt-3.5 max-w-[680px] text-[17px] font-medium leading-[1.5]">{tagline}</p>
                     <div className="mt-5 flex flex-wrap items-baseline gap-x-3.5 gap-y-1">
-                      <span className="text-[clamp(24px,2.6vw,36px)] leading-none font-extrabold tracking-[-0.03em] text-accent">
+                      <span className="text-[clamp(24px,2.6vw,36px)] leading-none font-extrabold tracking-[-0.03em] text-accent-deep group-hover:text-accent group-focus-visible:text-accent">
                         {metric}
                       </span>
                       <span className="font-mono text-[12px] tracking-[0.05em] uppercase opacity-80">{metricLabel}</span>

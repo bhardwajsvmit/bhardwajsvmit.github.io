@@ -27,7 +27,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   };
 }
 
-const label = 'font-mono text-[13px] tracking-[0.16em] text-accent uppercase';
+const labelBase = 'font-mono text-[13px] tracking-[0.16em] uppercase';
+const label = `${labelBase} text-accent-deep`;
 const prose = 'm-0 max-w-[820px] text-[clamp(18px,1.7vw,22px)] font-medium leading-[1.55]';
 
 const Block = ({ index, name, children }: { index: number; name: string; children: ReactNode }) => (
@@ -121,7 +122,7 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
                     <li
                       key={i}
                       className="grid grid-cols-[44px_1fr] gap-4 border-b-2 border-ink px-1 py-[18px] text-[clamp(17px,1.5vw,20px)] font-bold leading-[1.4] text-ink">
-                      <span className="pt-0.5 font-mono text-[15px] text-accent">{String(item.n).padStart(2, '0')}</span>
+                      <span className="pt-0.5 font-mono text-[15px] text-accent-deep">{String(item.n).padStart(2, '0')}</span>
                       <span>{item.text}</span>
                     </li>
                   ),
@@ -133,7 +134,7 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
 
         <section className="bg-ink px-[34px] py-24 text-cream max-thone:px-5 max-thone:py-14">
           <div className="mx-auto max-w-[1500px]">
-            <h2 className={`m-0 font-medium ${label}`}>{'{ 04 — OUTCOME }'}</h2>
+            <h2 className={`m-0 font-medium text-accent ${labelBase}`}>{'{ 04 — OUTCOME }'}</h2>
             <p className="m-0 mt-5 max-w-[1200px] text-[clamp(26px,3.6vw,54px)] leading-[1.08] font-extrabold tracking-[-0.03em]">
               {study.outcome}
             </p>
@@ -168,7 +169,9 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
               key={dir}
               href={`/work/${other.slug}`}
               className={`group px-[34px] py-12 text-ink no-underline not-last:border-r-2 not-last:border-ink max-thone:px-5 max-thone:py-8 max-thone:not-last:border-r-0 max-thone:not-last:border-b-2 [transition:background_0.3s_cubic-bezier(0.2,0.7,0.2,1),color_0.3s_cubic-bezier(0.2,0.7,0.2,1)] hover:bg-ink hover:text-cream focus-visible:bg-ink focus-visible:text-cream focus-visible:outline-none ${align}`}>
-              <div className="font-mono text-[12.5px] font-bold tracking-[0.1em] text-accent uppercase">{dir}</div>
+              <div className="font-mono text-[12.5px] font-bold tracking-[0.1em] text-accent-deep uppercase group-hover:text-accent group-focus-visible:text-accent">
+                {dir}
+              </div>
               <div className="mt-3 text-[clamp(26px,3.6vw,54px)] leading-[0.95] font-extrabold tracking-[-0.03em]">
                 {other.title}
               </div>

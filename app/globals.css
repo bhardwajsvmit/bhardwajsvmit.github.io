@@ -1,9 +1,11 @@
 @import 'tailwindcss';
 
+/* accent-deep is the accent for text on cream: 4.6 to 1 contrast, where the bright accent is 2.7 to 1. */
 @theme {
   --color-ink: #111110;
   --color-cream: #ece7da;
   --color-accent: #ff4d23;
+  --color-accent-deep: #c23010;
   --color-rule: #2b2a27;
 
   --breakpoint-tiny: 330px;

@@ -147,7 +147,7 @@ const Hero = () => {
               addReveal(0, el);
               eyebrowRef.current = el;
             }}
-            className="relative z-3 flex items-center gap-[14px] font-mono text-[13px] font-medium tracking-[0.14em] text-accent uppercase">
+            className="relative z-3 flex items-center gap-[14px] font-mono text-[13px] font-medium tracking-[0.14em] text-accent-deep uppercase">
             {eyebrowText}
             <div
               ref={eyebrowInkRef}
@@ -186,7 +186,7 @@ const Hero = () => {
 
         <div
           ref={el => addReveal(2, el)}
-          className="relative z-2 mt-auto flex flex-wrap items-center gap-x-[30px] gap-y-2.5 pt-10 font-mono text-xs tracking-[0.06em] text-[#6b685f] uppercase max-thone:gap-x-3.5 max-thone:pt-8 [&_.sep]:text-accent">
+          className="relative z-2 mt-auto flex flex-wrap items-center gap-x-[30px] gap-y-2.5 pt-10 font-mono text-xs tracking-[0.06em] text-[#6b685f] uppercase max-thone:gap-x-3.5 max-thone:pt-8 [&_.sep]:text-accent-deep">
           {stats &&
             stats.map((stat, i) => (
               <React.Fragment key={i}>
